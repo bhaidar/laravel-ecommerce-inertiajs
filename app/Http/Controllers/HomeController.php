@@ -10,7 +10,7 @@ class HomeController extends Controller
     public function __invoke(): \Inertia\Response
     {
         return Inertia::render('Welcome', [
-            'categories' => Category::query()->tree()->get(['id', 'title', 'slug', 'parent_id'])->toTree(),
+            'categories' => Category::tree()->get()->toTree(),
         ]);
     }
 }
