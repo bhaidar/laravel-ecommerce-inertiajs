@@ -4,6 +4,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
   product: Object,
+  variations: Object,
 });
 
 const formattedPrice = computed(() => props.product?.formatted_price?.formatted);
@@ -27,6 +28,11 @@ const formattedPrice = computed(() => props.product?.formatted_price?.formatted)
                 <p class="mt-2 text-gray-500">
                   {{ product?.description }}
                 </p>
+              </div>
+              <div class="mt-6">
+                <pre>
+                  {{ variations }}
+                </pre>
               </div>
             </div>
           </div>
