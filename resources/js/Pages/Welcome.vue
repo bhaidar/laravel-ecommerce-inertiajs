@@ -1,7 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Category from '@/Components/Category.vue';
+import Category from '@/Components/Products/Category.vue';
 
 defineProps({
     categories: Object,

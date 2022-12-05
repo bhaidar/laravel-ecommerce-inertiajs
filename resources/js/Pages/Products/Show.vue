@@ -1,10 +1,14 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, isProxy, toRaw } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import ProductSelector from '@/Components/Products/ProductSelector.vue';
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy'
+import head from 'lodash/head'
+import chain from 'lodash/chain';
 
 const props = defineProps({
   product: Object,
-  variations: Object,
 });
 
 const formattedPrice = computed(() => props.product?.formatted_price?.formatted);
@@ -30,9 +34,7 @@ const formattedPrice = computed(() => props.product?.formatted_price?.formatted)
                 </p>
               </div>
               <div class="mt-6">
-                <pre>
-                  {{ variations }}
-                </pre>
+                <product-selector :product="product" />
               </div>
             </div>
           </div>
