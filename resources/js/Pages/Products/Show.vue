@@ -7,7 +7,7 @@ const props = defineProps({
   product: Object,
 });
 
-const formattedPrice = computed(() => props.product?.formatted_price?.formatted);
+const formattedPrice = computed(() => props.product?.price?.formatted);
 </script>
 
 <template>

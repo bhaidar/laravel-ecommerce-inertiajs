@@ -1,5 +1,6 @@
 <script setup>
 import {computed, ref, toRaw, watch} from 'vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ProductDropdown from '@/Components/Products/ProductDropdown.vue';
 
 // Props
@@ -9,55 +10,35 @@ const props = defineProps({
 
 // Refs
 const selectedVariation = ref(null);
-const productSku = ref(null);
+const skuVariant = ref(null);
 
 // Computed
 const initialVariations = computed(() => {
   return props?.product?.variations;
 });
 
+const skuVariantPrice = computed(() => skuVariant?.value?.price?.formatted );
+
 // Functions
 const onVariationChanged = (variation) => {
-  selectedVariation.value = variation;
+  skuVariant.value = variation;
 };
 
-function flattenVariations(variation) {
-    let result = [];
-
-  variation?.children_recursive?.forEach((variation) => {
-      result.push(variation);
-      return flattenVariations(variation);
-    });
-
-    return result;
-  }
-
-// Watch
-watch(() => {
-  // this is required since selectedVariation is a complex object
-  return {
-    ...toRaw(selectedVariation.value)
-  } }, (variation) => {
-  if (!variation) {
-    return;
-  }
-
-  if (variation?.sku) {
-    productSku.value = variation;
-    return;
-  }
-
-  productSku.value = flattenVariations(variation)?.find((child) => child?.selected && child?.sku);
-}, {
-  deep: true,
-});
+const onAddToCart = () => {
+};
 </script>
 
 <template>
-<div>
+<div class="flex flex-col space-y-6">
   <div v-if="initialVariations">
-    {{ productSku }}
+    {{ skuVariant }}
     <product-dropdown :variations="initialVariations" @variation-changed="onVariationChanged" />
+  </div>
+  <div v-if="skuVariant">
+    <div class="font-semibold text-lg">
+      {{ skuVariantPrice }}
+    </div>
+    <primary-button @click.prevent="onAddToCart">Add to cart</primary-button>
   </div>
 </div>
 </template>

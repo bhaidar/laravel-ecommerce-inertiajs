@@ -19,23 +19,12 @@ const hasChildren = computed(() => variationChildren?.value?.length > 0 );
 // Watch
 watch(selectedVariation, (variation) => {
   // handle top-level selection
- emit('variationChanged', variation);
+  onVariationChanged(variation);
 });
 
 // Event handlers
 const onVariationChanged = function(variation) {
-  // reset existing child
-  variationChildren?.value?.forEach((child) => child.selected = false);
-
-  // get the selected child
-  const existingChild = variationChildren?.value?.find((child) => child?.id === variation.id);
-
-  // mark it as selected
-  if (existingChild) {
-    existingChild.selected = true;
-  }
-
-  emit('variationChanged', variation);
+  emit('variationChanged', variation?.sku ? variation : null);
 };
 
 // grab the first variation
