@@ -2,10 +2,6 @@
 import { computed, isProxy, toRaw } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ProductSelector from '@/Components/Products/ProductSelector.vue';
-import groupBy from 'lodash/groupBy';
-import orderBy from 'lodash/orderBy'
-import head from 'lodash/head'
-import chain from 'lodash/chain';
 
 const props = defineProps({
   product: Object,

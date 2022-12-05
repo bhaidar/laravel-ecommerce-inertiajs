@@ -10,7 +10,7 @@ class ProductShowController extends Controller
     public function __invoke(Product $product): \Inertia\Response
     {
         return Inertia::render('Products/Show', [
-            'product' => $product->load('variations'),
+            'product' => $product->load('variations.childrenRecursive')
         ]);
     }
 }

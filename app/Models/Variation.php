@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Console\Traits\HasFormattedPrice;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class Variation extends Model
 {
     use HasFactory;
+    use HasRecursiveRelationships;
+    use HasFormattedPrice;
 
     protected $appends = [
         'display_name',
@@ -18,6 +22,11 @@ class Variation extends Model
     public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function childrenRecursive(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->children()->with('childrenRecursive');
     }
 
     /**
