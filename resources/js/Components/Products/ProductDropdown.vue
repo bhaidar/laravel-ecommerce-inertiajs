@@ -18,17 +18,24 @@ const hasChildren = computed(() => variationChildren?.value?.length > 0 );
 
 // Watch
 watch(selectedVariation, (variation) => {
+  // handle top-level selection
  emit('variationChanged', variation);
 });
 
 // Event handlers
 const onVariationChanged = function(variation) {
+  // reset existing child
+  variationChildren?.value?.forEach((child) => child.selected = false);
+
   // get the selected child
   const existingChild = variationChildren?.value?.find((child) => child?.id === variation.id);
 
   // mark it as selected
-  // the watch() is automatically triggered with input of selectedVariation
-  existingChild.selected = true;
+  if (existingChild) {
+    existingChild.selected = true;
+  }
+
+  emit('variationChanged', variation);
 };
 
 // grab the first variation
@@ -51,7 +58,15 @@ const variationName = computed(() => props?.variations?.find(Boolean)?.display_n
       </select>
     </div>
     <div v-if="hasChildren">
-      <product-dropdown :variations="variationChildren" @variation-changed="onVariationChanged"/>
+      <!--
+        The use of key is essential here. When the selectedVariation changes, it causes the
+        product-dropdown to reset its state and redraw it.
+      -->
+      <product-dropdown
+          :key="selectedVariation"
+          :variations="variationChildren"
+          @variation-changed="onVariationChanged"
+      />
     </div>
   </div>
 </template>
