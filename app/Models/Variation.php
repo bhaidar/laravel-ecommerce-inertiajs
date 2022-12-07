@@ -24,9 +24,14 @@ class Variation extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function childrenRecursive(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function variations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->children()->with('childrenRecursive');
+        return $this->children()->with('variations');
+    }
+
+    public function stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Stock::class);
     }
 
     /**

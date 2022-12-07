@@ -31,7 +31,6 @@ const onAddToCart = () => {
 <template>
 <div class="flex flex-col space-y-6">
   <div v-if="initialVariations">
-    {{ skuVariant }}
     <product-dropdown :variations="initialVariations" @variation-changed="onVariationChanged" />
   </div>
   <div v-if="skuVariant">

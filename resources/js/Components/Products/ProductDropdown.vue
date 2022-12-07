@@ -13,8 +13,9 @@ const props = defineProps({
 const selectedVariation = ref('');
 
 // Computed
-const variationChildren = computed(() => selectedVariation.value?.children_recursive);
+const variationChildren = computed(() => selectedVariation.value?.variations);
 const hasChildren = computed(() => variationChildren?.value?.length > 0 );
+const variationName = computed(() => props?.variations?.find(Boolean)?.display_name)
 
 // Watch
 watch(selectedVariation, (variation) => {
@@ -22,13 +23,15 @@ watch(selectedVariation, (variation) => {
   onVariationChanged(variation);
 });
 
-// Event handlers
+// Functions
 const onVariationChanged = function(variation) {
   emit('variationChanged', variation?.sku ? variation : null);
 };
 
-// grab the first variation
-const variationName = computed(() => props?.variations?.find(Boolean)?.display_name)
+const totalStock = (variation) => {
+  return variation?.stocks?.reduce((accumulator, currentValue) => accumulator + currentValue?.amount, 0);
+};
+
 </script>
 
 <template>
