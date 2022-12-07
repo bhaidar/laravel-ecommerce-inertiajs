@@ -13,7 +13,7 @@ const props = defineProps({
 const selectedVariation = ref('');
 
 // Computed
-const variationChildren = computed(() => selectedVariation.value?.variations);
+const variationChildren = computed(() => selectedVariation.value?.children);
 const hasChildren = computed(() => variationChildren?.value?.length > 0 );
 const variationName = computed(() => props?.variations?.find(Boolean)?.display_name)
 

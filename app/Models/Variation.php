@@ -24,11 +24,6 @@ class Variation extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function variations(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->children()->with('variations');
-    }
-
     public function stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Stock::class);

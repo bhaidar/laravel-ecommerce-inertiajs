@@ -10,8 +10,13 @@ class ProductShowController extends Controller
 {
     public function __invoke(Product $product): \Inertia\Response
     {
+        $product->setRelation(
+            'variations',
+            Variation::with('stocks')->treeOf(fn($query) => $query->isRoot()->where('product_id', $product->id))->get()->toTree()
+        );
+
         return Inertia::render('Products/Show', [
-            'product' => $product->load(['variations.stocks', 'variations.variations.stocks']),
+            'product' => $product,
         ]);
     }
 }
