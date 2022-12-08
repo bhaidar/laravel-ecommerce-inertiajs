@@ -45,7 +45,7 @@ const totalStock = (variation) => {
         <option value="">Choose an option</option>
 
         <option v-for="variation in variations" :key="variation.id" :value="variation">
-          {{ variation.title }}
+          {{ variation.title }} {{ variation.stock_count }}
         </option>
       </select>
     </div>
