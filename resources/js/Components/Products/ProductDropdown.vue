@@ -27,11 +27,6 @@ watch(selectedVariation, (variation) => {
 const onVariationChanged = function(variation) {
   emit('variationChanged', variation?.sku ? variation : null);
 };
-
-const totalStock = (variation) => {
-  return variation?.stocks?.reduce((accumulator, currentValue) => accumulator + currentValue?.amount, 0);
-};
-
 </script>
 
 <template>
