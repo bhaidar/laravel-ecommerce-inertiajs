@@ -9,28 +9,24 @@ const props = defineProps({
 });
 
 // Refs
-const selectedVariation = ref(null);
 const skuVariant = ref(null);
+const initialVariations = ref(props?.product?.variations);
 
 // Computed
-const initialVariations = computed(() => {
-  return props?.product?.variations;
-});
-
+const hasVariations = computed(() => props?.product?.variations?.length > 0);
 const skuVariantPrice = computed(() => skuVariant?.value?.price?.formatted );
 
 // Functions
 const onVariationChanged = (variation) => {
   skuVariant.value = variation;
 };
-
 const onAddToCart = () => {
 };
 </script>
 
 <template>
 <div class="flex flex-col space-y-6">
-  <div v-if="initialVariations">
+  <div v-if="hasVariations">
     <product-dropdown :variations="initialVariations" @variation-changed="onVariationChanged" />
   </div>
   <div v-if="skuVariant">
