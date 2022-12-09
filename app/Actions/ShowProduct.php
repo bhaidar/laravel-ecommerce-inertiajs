@@ -4,6 +4,8 @@ namespace App\Actions;
 
 use App\Models\Product;
 use App\Models\Variation;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use stdClass;
 
 class ShowProduct
 {
@@ -24,8 +26,11 @@ class ShowProduct
                 ->toTree()
         );
 
-        // calculate stock at each level & return product
-        return $this->calculateStock($product);
+        // calculate stock at each level
+        $product = $this->calculateStock($product);
+
+        // prepare media urls & return product
+        return $this->loadMediaUrls($product);
     }
 
     private function calculateStock(Product $product): Product
@@ -72,5 +77,35 @@ class ShowProduct
         }
 
         return $variation[self::STOCK_COUNT];
+    }
+
+    private function loadMediaUrls(Product $product): Product
+    {
+        $product->media = collect([]);
+
+        // load product media
+        Media::query()
+            ->where('model_type', Product::class)
+            ->where('model_id', $product->id)
+            ->get()
+            ->each(function ($media) use (&$product) {
+                $product->media->push([
+                    'original' => $media->getUrl(),
+                    'conversions' => $this->getImageConversions($media),
+                ]);
+            });
+
+        return $product;
+    }
+
+    private function getImageConversions(Media $media): array
+    {
+        $conversions = [];
+
+        foreach ($media->generated_conversions as $conversion => $key) {
+            $conversions[] = $media->getUrl($conversion);
+        }
+
+        return $conversions;
     }
 }
