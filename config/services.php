@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'shop' => [
+        'lowStock' => env('SHOP_LOW_STOCK', '5'),
+    ],
+
 ];

@@ -38,9 +38,8 @@ const onVariationChanged = function(variation) {
 
       <select v-model="selectedVariation" class="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm">
         <option value="">Choose an option</option>
-
-        <option v-for="variation in variations" :key="variation.id" :value="variation">
-          {{ variation.title }} {{ variation.stock_count }}
+        <option v-for="variation in variations" :key="variation.id" :value="variation" :disabled="variation.outOfStock">
+          {{ variation.title }} {{ variation.lowStock ? '(Low stock)' : '' }} {{ variation.outOfStock ? '(Out of stock)' : '' }}
         </option>
       </select>
     </div>
