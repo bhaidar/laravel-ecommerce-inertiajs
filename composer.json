@@ -12,6 +12,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.8",
         "laravel/tinker": "^2.7",
+        "spatie/laravel-medialibrary": "^10.0.0",
         "staudenmeir/laravel-adjacency-list": "^1.0",
         "tightenco/ziggy": "^1.0"
     },
