@@ -11,7 +11,7 @@ const medias = computed(() => props.product?.media);
 const thumbnail = (media) => media?.conversions?.[0];
 
 const selectMedia = (media) => {
-  original.value = media.original;
+  original.value = media?.original;
 }
 </script>
 

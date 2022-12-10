@@ -95,6 +95,13 @@ class ShowProduct
                 ]);
             });
 
+        if ($product->media->count() === 0)
+        {
+            $product->media->push([
+                'original' => $product->getFirstMediaUrl()
+            ]);
+        }
+
         return $product;
     }
 
