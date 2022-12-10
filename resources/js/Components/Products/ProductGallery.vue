@@ -5,13 +5,13 @@ const props = defineProps({
   product: Object,
 });
 
-const original = ref(props.product?.media?.[0]?.original);
-const medias = computed(() => props.product?.media);
+const original = ref(props.product?.images?.[0]?.original);
+const images = computed(() => props.product?.images);
 
-const thumbnail = (media) => media?.conversions?.[0];
+const thumbnail = (image) => image?.conversions?.[0];
 
-const selectMedia = (media) => {
-  original.value = media?.original;
+const onSelectedImage = (image) => {
+  original.value = image?.original;
 }
 </script>
 
@@ -19,8 +19,8 @@ const selectMedia = (media) => {
   <div class="flex flex-col space-y-4">
     <img :src="original" alt="">
     <div class="grid grid-cols-6 gap-2">
-      <button v-for="media in medias" :key="media" @click="selectMedia(media)">
-        <img :src="thumbnail(media)" alt="">
+      <button v-for="image in images" :key="image" @click="onSelectedImage(image)">
+        <img :src="thumbnail(image)" alt="">
       </button>
     </div>
   </div>

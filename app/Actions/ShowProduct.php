@@ -81,7 +81,9 @@ class ShowProduct
 
     private function loadMediaUrls(Product $product): Product
     {
-        $product->media = collect([]);
+        // I've chosen to use images not media in order not to have
+        // any conflicts with spatie media library package
+        $product->images = collect([]);
 
         // load product media
         Media::query()
@@ -89,15 +91,16 @@ class ShowProduct
             ->where('model_id', $product->id)
             ->get()
             ->each(function ($media) use (&$product) {
-                $product->media->push([
+                $product->images->push([
                     'original' => $media->getUrl(),
                     'conversions' => $this->getImageConversions($media),
                 ]);
             });
 
-        if ($product->media->count() === 0)
+        // Set the default image when no other images are stored in the db
+        if ($product->images->count() === 0)
         {
-            $product->media->push([
+            $product->images->push([
                 'original' => $product->getFirstMediaUrl()
             ]);
         }
