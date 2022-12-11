@@ -31,4 +31,14 @@ class Cart implements CartInterface
 
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
+
+    public function contents()
+    {
+        return $this->instance()->variations;
+    }
+
+    protected function instance()
+    {
+        return ModelsCart::whereUuid($this->session->get(config('cart.session.key')))->firstOrFail();
+    }
 }
