@@ -9,6 +9,9 @@ use App\Models\Cart as ModelsCart;
 
 class Cart implements CartInterface
 {
+    // Caching in-class cart instance
+    protected ModelsCart $instance;
+
     public function __construct(protected SessionManager $session)
     {
     }
@@ -39,6 +42,10 @@ class Cart implements CartInterface
 
     protected function instance()
     {
-        return ModelsCart::whereUuid($this->session->get(config('cart.session.key')))->firstOrFail();
+        if (!isset($this->instance)) {
+            $this->instance = ModelsCart::whereUuid($this->session->get(config('cart.session.key')))->firstOrFail();
+        }
+
+        return $this->instance;
     }
 }
