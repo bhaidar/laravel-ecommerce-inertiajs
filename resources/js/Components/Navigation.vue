@@ -39,14 +39,21 @@ const showingNavigationDropdown = ref(false);
           </div>
         </div>
 
-        <div class="hidden sm:flex sm:items-center sm:ml-6">
+        <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-8">
           <!-- Settings Dropdown -->
-          <div class="hidden sm:flex sm:items-center sm:ml-6">
-            <Link href="#"
-                  class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-              Cart ({{ cartCount }})
-            </Link>
-          </div>
+          <Link href="#"
+                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+            Cart ({{ cartCount }})
+          </Link>
+          <Link :href="route('login')" v-if="isGuest"
+                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+            Login
+          </Link>
+          <Link :href="route('register')" v-if="isGuest"
+                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+            Register
+          </Link>
+
           <div v-if="!isGuest">
             <div class="ml-3 relative">
               <Dropdown align="right" width="48">
