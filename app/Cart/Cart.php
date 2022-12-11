@@ -3,8 +3,9 @@
 namespace App\Cart;
 
 use App\Cart\Contracts\CartInterface;
+use App\Models\User;
 use Illuminate\Session\SessionManager;
-use JetBrains\PhpStorm\NoReturn;
+use App\Models\Cart as ModelsCart;
 
 class Cart implements CartInterface
 {
@@ -12,8 +13,22 @@ class Cart implements CartInterface
     {
     }
 
-    #[NoReturn] public function create()
+    public function exists()
     {
-        dd($this->session);
+        return $this->session->has(config('cart.session.key'));
+    }
+
+    public function create(?User $user = null)
+    {
+        $instance = ModelsCart::query()->make();
+
+        if ($user)
+        {
+            $instance->user()->associate($user);
+        }
+
+        $instance->save();
+
+        $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 }
