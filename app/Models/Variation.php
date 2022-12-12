@@ -37,6 +37,11 @@ class Variation extends Model implements HasMedia
         return $this->hasMany(Stock::class);
     }
 
+    public function stockCount()
+    {
+        return $this->stocks()->sum('amount');
+    }
+
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb200x200')

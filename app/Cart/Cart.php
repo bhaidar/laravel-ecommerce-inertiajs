@@ -50,8 +50,8 @@ class Cart implements CartInterface
 
         $this->instance()->variations()->syncWithoutDetaching([
             $variation->id => [
-                // TODO: make sure quantity doesn't exceed the stock
-                'quantity' => $quantity,
+                // Allow adding the max in stock
+                'quantity' => min($quantity,$variation->stockCount())
             ],
         ]);
     }
