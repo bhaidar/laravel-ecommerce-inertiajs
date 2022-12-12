@@ -6,13 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCartVariationRequest extends FormRequest
 {
-    protected array $notification = [
+    public array $notification = [
         'title' => "Couldn't add to cart",
         'message' => 'Your item was not added to cart!',
         'color' => 'red',
     ];
 
-    protected function success()
+    public function success()
     {
         $this->notification = [
             'title' => 'Added to cart',

@@ -5,19 +5,13 @@ import Icon from '@/Components/Icon.vue';
 
 // Computed
 const icon = computed(() => notification?.color === 'red' ? 'exclamation-circle' : 'check-circle');
-const notification = computed({
-  get () {
-    return usePage().props?.value?.flash?.notification;
-  },
-  set() {
-    usePage().props.value.flash.notification = null;
-  },
-});
+const notification = computed(() => usePage().props?.value?.flash?.notification);
 
 // Functions
 const notificationColor = (notification) => notification?.color;
 const notificationTitle = (notification) => notification?.title;
 const notificationMessage = (notification) => notification?.message;
+const hideNotification = () => delete usePage().props?.value?.flash?.notification;
 </script>
 
 <template>
@@ -58,7 +52,7 @@ const notificationMessage = (notification) => notification?.message;
             <div class="ml-4 flex-shrink-0 flex">
               <button
                   class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  @click="notification = undefined">
+                  @click.prevent="hideNotification">
                 <span class="sr-only">Close</span>
                 <icon icon="x-mark"/>
               </button>
