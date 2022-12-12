@@ -4,6 +4,7 @@ namespace App\Cart;
 
 use App\Cart\Contracts\CartInterface;
 use App\Models\User;
+use App\Models\Variation;
 use Illuminate\Session\SessionManager;
 use App\Models\Cart as ModelsCart;
 
@@ -38,6 +39,26 @@ class Cart implements CartInterface
     public function contents()
     {
         return $this->instance()->variations;
+    }
+
+    public function add($variation, int $quantity = 1)
+    {
+        // Increment quantity when a variation already exists in the cart
+        if ($existingVariation = $this->getVariation($variation)) {
+             $quantity += $existingVariation->pivot->quantity;
+        }
+
+        $this->instance()->variations()->syncWithoutDetaching([
+            $variation->id => [
+                // TODO: make sure quantity doesn't exceed the stock
+                'quantity' => $quantity,
+            ],
+        ]);
+    }
+
+    protected function getVariation($variation)
+    {
+        return $this->instance()->variations->find($variation->id);
     }
 
     protected function instance()

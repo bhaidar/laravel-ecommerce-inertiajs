@@ -13,6 +13,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
+/**
+ * @property mixed $id
+ */
 class Variation extends Model implements HasMedia
 {
     use HasFactory;
