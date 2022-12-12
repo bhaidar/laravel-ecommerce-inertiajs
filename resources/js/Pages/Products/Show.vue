@@ -1,5 +1,5 @@
 <script setup>
-import { computed, isProxy, toRaw } from 'vue';
+import { computed } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import ProductSelector from '@/Components/Products/ProductSelector.vue';
 import ProductGallery from "@/Components/Products/ProductGallery.vue";
@@ -12,6 +12,7 @@ const formattedPrice = computed(() => props.product?.price?.formatted);
 </script>
 
 <template>
+  <div>
   <AppLayout>
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -39,4 +40,5 @@ const formattedPrice = computed(() => props.product?.price?.formatted);
       </div>
     </div>
   </AppLayout>
+  </div>
 </template>
