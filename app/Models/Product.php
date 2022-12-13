@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Console\Traits\HasFormattedPrice;
+use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Image\Manipulations;
@@ -18,6 +19,14 @@ class Product extends Model implements HasMedia
     use HasFactory;
     use HasFormattedPrice;
     use InteractsWithMedia;
+    use HasStock;
+
+    public function includeStock()
+    {
+        foreach ($this->variations as $variation) {
+            $this->calculateStock($variation);
+        }
+    }
 
     public function registerMediaConversions(Media $media = null): void
     {

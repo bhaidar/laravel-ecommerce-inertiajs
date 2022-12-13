@@ -56,8 +56,9 @@ class HandleInertiaRequests extends Middleware
 
                 return [
                     //'products' => ProductResource::collection($cart->products),
-                    //'total' => $cart->total(),
-                    'count' => $content->count(),
+                    'content' => $content,
+                    'count' => $content->count() ?? 0,
+                    'total' => $content->sum(fn ($variation) => $variation->pivot->quantity),
                 ];
             },
             'flash' => [

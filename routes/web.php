@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartVariationController;
 use App\Http\Controllers\ProductShowController;
 use Inertia\Inertia;
@@ -15,10 +16,9 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth'])
-    ->prefix('/cart')
+Route::prefix('/cart')
     ->group(function () {
-        // Route::get('/', [CartController::class, 'index'])->name('cart.index');
+        Route::get('/', CartController::class)->name('cart.index');
         Route::post('/variations', [CartVariationController::class, 'store'])->name('cart.variations.store');
 //        Route::delete('/products/{product:slug}', [CartProductController::class, 'destroy'])->name(
 //            'cart.products.destroy'
