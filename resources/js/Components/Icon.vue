@@ -14,7 +14,5 @@ const theIcon = computed(() => {
 </script>
 
 <template>
-  <div>
-    <component :is="theIcon" class="h-5 w-5" />
-  </div>
+  <component :is="theIcon" class="h-5 w-5 fill-current" />
 </template>
