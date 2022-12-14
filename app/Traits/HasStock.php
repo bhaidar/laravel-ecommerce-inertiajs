@@ -6,7 +6,7 @@ use App\Models\Variation;
 
 trait HasStock
 {
-    public function calculateStock (Variation $variation): int
+    public function getStock (Variation $variation): int
     {
         $stockFigures = StockFigures::make();
 
@@ -21,7 +21,7 @@ trait HasStock
         if (!empty($variation->children)) {
             foreach ($variation->children as $childVariation)
             {
-                $stockFigures->stockCount += $this->calculateStock($childVariation);
+                $stockFigures->stockCount += $this->getStock($childVariation);
 
                 $this->calculateStockState($stockFigures);
                 $variation['stockFigures'] = $stockFigures;

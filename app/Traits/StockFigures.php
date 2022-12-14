@@ -4,13 +4,22 @@ namespace App\Traits;
 
 class StockFigures
 {
-    public int $stockCount = 0;
-    public bool $inStock = false;
-    public bool $outOfStock = false;
-    public bool $lowStock = false;
-
-    public static function make(): StockFigures
+    public function __construct(
+        public int $stockCount,
+        public bool $inStock,
+        public bool $outOfStock,
+        public bool $lowStock
+    )
     {
-        return new self();
+    }
+
+    public static function make(
+        int $stockCount = 0,
+        bool $inStock = false,
+        bool $outOfStock = false,
+        bool $lowStock = false
+    ): StockFigures
+    {
+        return new self($stockCount, $inStock, $outOfStock, $lowStock);
     }
 }

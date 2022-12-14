@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Console\Traits\HasFormattedPrice;
+use App\Traits\HasImages;
 use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,12 +21,34 @@ class Product extends Model implements HasMedia
     use HasFormattedPrice;
     use InteractsWithMedia;
     use HasStock;
+    use HasImages;
 
-    public function includeStock()
+    public function loadVariationTree()
     {
-        foreach ($this->variations as $variation) {
-            $this->calculateStock($variation);
+        $this->setRelation(
+            'variations',
+            Variation::with(['stocks'])
+                ->treeOf(fn($query) => $query->isRoot()->where('product_id', $this->id))
+                ->get()
+                ->toTree()
+        );
+    }
+
+    public function loadStock(): void
+    {
+        if (!$this->variations)
+        {
+            $this->loadVariationTree();
         }
+
+        foreach ($this->variations as $variation) {
+            $this->getStock($variation);
+        }
+    }
+
+    public function loadImages()
+    {
+        $this->getImages();
     }
 
     public function registerMediaConversions(Media $media = null): void

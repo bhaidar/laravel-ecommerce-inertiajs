@@ -22,11 +22,11 @@ const total = computed(() => props.cart?.total);
     <div class="p-6 bg-white border-b border-gray-200 col-span-4 -mt-3 self-start">
       <template v-if="cartExists">
         <CartItem v-for="variation in variations" :key="variation.id" :item="variation" />
-        <div class="mt-4">
-          <div class="mb-2">Cart Total: {{ total }}</div>
-          <!-- :href="route('checkout.index')" -->
-          <LinkButton>Checkout</LinkButton>
-        </div>
+<!--        <div class="mt-4">-->
+<!--          <div class="mb-2">Cart Total: {{ total }}</div>-->
+<!--          &lt;!&ndash; :href="route('checkout.index')" &ndash;&gt;-->
+<!--          <LinkButton>Checkout</LinkButton>-->
+<!--        </div>-->
       </template>
       <template v-else>
           Your cart is empty
