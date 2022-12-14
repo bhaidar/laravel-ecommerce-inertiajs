@@ -14,46 +14,28 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property mixed $id
+ * @property mixed $thumbnails
  */
 class Product extends Model implements HasMedia
 {
     use HasFactory;
     use HasFormattedPrice;
     use InteractsWithMedia;
-    use HasStock;
     use HasImages;
 
-    public function loadVariationTree()
-    {
-        $this->setRelation(
-            'variations',
-            Variation::with(['stocks'])
-                ->treeOf(fn($query) => $query->isRoot()->where('product_id', $this->id))
-                ->get()
-                ->toTree()
-        );
-    }
+    protected const CONVERSION_NAME = 'thumb200x200';
 
     public function loadStock(): void
     {
-        if (!$this->variations)
-        {
-            $this->loadVariationTree();
-        }
-
+        // Assuming variations are loaded
         foreach ($this->variations as $variation) {
-            $this->getStock($variation);
+            $variation->loadStock();
         }
-    }
-
-    public function loadImages()
-    {
-        $this->getImages();
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
-        $this->addMediaConversion('thumb200x200')
+        $this->addMediaConversion(self::CONVERSION_NAME)
             ->fit(Manipulations::FIT_CROP, 200, 200);
     }
 

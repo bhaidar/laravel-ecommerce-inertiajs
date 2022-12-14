@@ -6,7 +6,12 @@ use App\Models\Variation;
 
 trait HasStock
 {
-    public function getStock (Variation $variation): int
+    public function loadStock(): void
+    {
+        $this->getStock($this);
+    }
+
+    private function getStock (Variation $variation): int
     {
         $stockFigures = StockFigures::make();
 

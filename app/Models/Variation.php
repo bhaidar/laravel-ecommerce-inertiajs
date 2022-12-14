@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Console\Traits\HasFormattedPrice;
+use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ class Variation extends Model implements HasMedia
     use HasRecursiveRelationships;
     use HasFormattedPrice;
     use InteractsWithMedia;
+    use HasStock;
 
     protected $appends = [
         'display_name',

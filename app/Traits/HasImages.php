@@ -7,7 +7,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 trait HasImages
 {
-    public function getImages(): void
+    public function getMediaUrls(): void
     {
         $interfaces = class_implements(get_class($this));
         if (!isset($interfaces[HasMedia::class]))
@@ -15,38 +15,28 @@ trait HasImages
             return;
         }
 
-        // I've chosen to use images not media in order not to have
-        // any conflicts with spatie media library package
-        $this->images = collect([]);
+        // initialize the media file
+        $this->medias = collect([]);
 
-        // load images
-        Media::query()
-            ->where('model_type', get_class($this))
-            ->where('model_id', $this->id)
-            ->get()
-            ->each(function ($media) {
-                $this->images->push([
-                    'original' => $media->getUrl(),
-                    'conversions' => $this->getImageConversions($media),
-                ]);
-            });
+        $this->media->each(function ($media) {
+            $mediaFile = new MediaFile(
+                originalImage: $media->getUrl(),
+                thumbnails: $media->getGeneratedConversions()->keys()->map(function ($conversion) use ($media) {
+                    return $media->getUrl($conversion);
+                })->all()
+            );
 
-        // Set the default image when no other images are stored in the db
-        if ($this->images->count() === 0) {
-            $this->images->push([
-                'original' => $this->getFirstMediaUrl()
-            ]);
+            $this->medias->push($mediaFile);
+        });
+
+        // Set a default image when no images are found
+        if ($this->medias->isEmpty()) {
+            $mediaFile = new MediaFile(
+            // it generates a default image implicitly
+                originalImage: $this->getFirstMediaUrl(),
+            );
+
+            $this->medias->push($mediaFile);
         }
-    }
-
-    private function getImageConversions(Media $media): array
-    {
-        $conversions = [];
-
-        foreach ($media->generated_conversions as $conversion => $key) {
-            $conversions[] = $media->getUrl($conversion);
-        }
-
-        return $conversions;
     }
 }
