@@ -26,7 +26,7 @@ const variationPrice = computed(() => props.item?.price?.formatted);
           <div>{{ productTitle }}</div>
 
           <div class="flex items-center text-sm">
-            Variation specifics
+            Variation ancestors
           </div>
         </div>
       </div>

@@ -20,6 +20,9 @@ class ShowProduct
         // prepare media urls
         $this->loadMedia($product);
 
+        // Preload product on variations
+        $this->preloadProductsOnVariation($product);
+
         return $product;
     }
 
@@ -42,5 +45,10 @@ class ShowProduct
 
         // Do in-memory image generation
         $product->getMediaUrls();
+    }
+
+    private function preloadProductsOnVariation($product): void
+    {
+        $product->variations->each->setRelation('product', $product);
     }
 }

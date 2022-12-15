@@ -15,7 +15,7 @@ trait HasStock
     {
         $stockFigures = StockFigures::make();
 
-        if (!empty($variation->stocks))
+        if ($variation->relationLoaded('stocks'))
         {
             $stockFigures->stockCount = $this->calculateSelfStock($variation);
 
@@ -23,7 +23,7 @@ trait HasStock
             $variation['stockFigures'] = $stockFigures;
         }
 
-        if (!empty($variation->children)) {
+        if ($variation->relationLoaded('children')) {
             foreach ($variation->children as $childVariation)
             {
                 $stockFigures->stockCount += $this->getStock($childVariation);

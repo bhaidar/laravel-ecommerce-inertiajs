@@ -2,6 +2,7 @@
 
 namespace App\Cart;
 
+use App\Actions\GetCart;
 use App\Cart\Contracts\CartInterface;
 use App\Models\User;
 use App\Models\Variation;
@@ -14,9 +15,11 @@ class Cart implements CartInterface
     // Caching in-class cart instance
     protected ModelsCart $instance;
 
-    public function __construct(protected SessionManager $session)
-    {
-    }
+    public function __construct(
+        protected SessionManager $session,
+        protected GetCart $getCart,
+    )
+    { }
 
     public function exists()
     {
@@ -65,26 +68,9 @@ class Cart implements CartInterface
     protected function instance()
     {
         if (!isset($this->instance)) {
-            $this->instance = ModelsCart::with(['variations', 'variations.media', 'variations.product:id,title'])
-                ->whereUuid(
-                    $this->session->get(
-                        config('cart.session.key')
-                    )
-                )->firstOrFail();
-
-            // Populate variation media urls
-            $this->populateVariationMediaUrls($this->instance->variations);
+            $this->instance = $this->getCart->execute($this->session);
         }
 
         return $this->instance;
-    }
-
-    /**
-     * @param Collection $variations
-     * @return void
-     */
-    private function populateVariationMediaUrls(Collection $variations): void
-    {
-        $variations->each->getMediaUrls();
     }
 }
