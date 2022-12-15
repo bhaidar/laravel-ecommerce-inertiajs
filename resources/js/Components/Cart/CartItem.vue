@@ -6,6 +6,7 @@ const props = defineProps({
   item: Object,
 });
 
+const variationImage = computed(() => props.item?.medias?.[0]?.originalImage);
 const variationTitle = computed(() => props.item?.title);
 const variationPrice = computed(() => props.item?.price?.formatted);
 </script>
@@ -13,7 +14,7 @@ const variationPrice = computed(() => props.item?.price?.formatted);
 <template>
   <div class="border-b py-3 flex items-start last:border-0 last:pb-0">
     <div class="w-20 mr-4">
-      <img src="" class="w-20" alt="">
+      <img :src="variationImage" class="w-20" alt="">
     </div>
 
     <div class="space-y-2">

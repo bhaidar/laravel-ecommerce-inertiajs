@@ -9,7 +9,7 @@ const props = defineProps({
 });
 
 const cartExists = computed(() => props.cart?.count > 0);
-const variations = computed(() => props.cart?.content);
+const variations = computed(() => props.cart?.items?.data);
 const total = computed(() => props.cart?.total);
 
 // const removeFromCart = function(product) {

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Console\Traits\HasFormattedPrice;
+use App\Http\Resources\ProductResource;
 use App\Traits\HasImages;
 use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,5 +45,10 @@ class Product extends Model implements HasMedia
         $this
             ->addMediaCollection('default')
             ->useFallbackUrl(url('/images/no_image_available.jpg'));
+    }
+
+    public function toResource(): ProductResource
+    {
+        return new ProductResource($this);
     }
 }

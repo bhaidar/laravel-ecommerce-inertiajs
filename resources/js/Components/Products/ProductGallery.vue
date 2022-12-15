@@ -5,8 +5,8 @@ const props = defineProps({
   product: Object,
 });
 
-const originalImage = ref(props.product?.medias?.[0].originalImage);
-const medias = computed(() => props.product?.medias);
+const originalImage = ref(props.product?.data?.medias?.[0].originalImage);
+const medias = computed(() => props.product?.data?.medias);
 
 const thumbnail = (media) => media?.thumbnails?.[0];
 

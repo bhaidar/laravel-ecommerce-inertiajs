@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Cart\Contracts\CartInterface;
+use App\Http\Resources\VariationResource;
 use App\Models\Cart as ModelsCart;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -48,17 +49,15 @@ class HandleInertiaRequests extends Middleware
             ],
             'cart' => function () {
                 try {
-                    $content = $this->cart->contents();
+                    $items = $this->cart->items();
                 } catch (ModelNotFoundException $e) {
                     Log::error($e->getMessage());
                     return null;
                 }
-
                 return [
-                    //'products' => ProductResource::collection($cart->products),
-                    'content' => $content,
-                    'count' => $content->count() ?? 0,
-                    'total' => $content->sum(fn ($variation) => $variation->pivot->quantity),
+                    'items' => VariationResource::collection($items),
+                    'count' => $items->count() ?? 0,
+                    'total' => $items->sum(fn ($variation) => $variation->pivot->quantity),
                 ];
             },
             'flash' => [

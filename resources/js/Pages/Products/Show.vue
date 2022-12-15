@@ -8,7 +8,9 @@ const props = defineProps({
   product: Object,
 });
 
-const formattedPrice = computed(() => props.product?.price?.formatted);
+const formattedPrice = computed(() => props.product?.data?.price?.formatted);
+const productDescription = computed(() => props.product?.data?.description);
+const productTitle = computed(() => props.product?.data?.title);
 </script>
 
 <template>
@@ -23,12 +25,12 @@ const formattedPrice = computed(() => props.product?.price?.formatted);
             </div>
             <div class="col-span-1 p-6 space-y-6">
               <div>
-                <h1>{{ product?.title }}</h1>
+                <h1>{{ productTitle }}</h1>
                 <h1 class="font-semibold text-xl mt-2">
                   {{ formattedPrice }}
                 </h1>
                 <p class="mt-2 text-gray-500">
-                  {{ product?.description }}
+                  {{ productDescription }}
                 </p>
               </div>
               <div class="mt-6">

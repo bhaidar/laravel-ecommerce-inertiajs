@@ -11,11 +11,11 @@ const props = defineProps({
 
 // Refs
 const skuVariant = ref(null);
-const initialVariations = ref(props?.product?.variations);
+const initialVariations = ref(props?.product?.data?.variations);
 const resetKey = ref(0);
 
 // Computed
-const hasVariations = computed(() => props?.product?.variations?.length > 0);
+const hasVariations = computed(() => props?.product?.data?.variations?.length > 0);
 const skuVariantPrice = computed(() => skuVariant?.value?.price?.formatted );
 
 // Functions

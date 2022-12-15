@@ -5,6 +5,7 @@ namespace App\Cart;
 use App\Cart\Contracts\CartInterface;
 use App\Models\User;
 use App\Models\Variation;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Session\SessionManager;
 use App\Models\Cart as ModelsCart;
 
@@ -36,7 +37,7 @@ class Cart implements CartInterface
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 
-    public function contents()
+    public function items()
     {
         return $this->instance()->variations;
     }
@@ -64,9 +65,26 @@ class Cart implements CartInterface
     protected function instance()
     {
         if (!isset($this->instance)) {
-            $this->instance = ModelsCart::whereUuid($this->session->get(config('cart.session.key')))->firstOrFail();
+            $this->instance = ModelsCart::with(['variations', 'variations.media'])
+                ->whereUuid(
+                    $this->session->get(
+                        config('cart.session.key')
+                    )
+                )->firstOrFail();
+
+            // Populate variation media urls
+            $this->populateVariationMediaUrls($this->instance->variations);
         }
 
         return $this->instance;
+    }
+
+    /**
+     * @param Collection $variations
+     * @return void
+     */
+    private function populateVariationMediaUrls(Collection $variations): void
+    {
+        $variations->each->getMediaUrls();
     }
 }
