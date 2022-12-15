@@ -15,6 +15,11 @@ trait HasImages
             return;
         }
 
+        if (!$this->relationLoaded('media'))
+        {
+            return;
+        }
+
         // initialize the media file
         $this->medias = collect([]);
 

@@ -28,7 +28,11 @@ class Product extends Model implements HasMedia
 
     public function loadStock(): void
     {
-        // Assuming variations are loaded
+        if (!$this->relationLoaded('variations'))
+        {
+            return;
+        }
+
         foreach ($this->variations as $variation) {
             $variation->loadStock();
         }

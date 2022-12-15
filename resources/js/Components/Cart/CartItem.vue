@@ -9,6 +9,9 @@ const props = defineProps({
 const variationImage = computed(() => props.item?.medias?.[0]?.originalImage);
 const productTitle = computed(() => props.item?.productTitle);
 const variationPrice = computed(() => props.item?.price?.formatted);
+const variationStockItems = computed(() => {
+  return Array.from({length: props.item?.stockFigures?.stockCount}, (_, i) => i + 1);
+});
 </script>
 
 <template>
@@ -35,7 +38,7 @@ const variationPrice = computed(() => props.item?.price?.formatted);
         <div class="text-sm flex items-center space-x-2">
           <div class="font-semibold">Quantity</div>
           <select class="text-sm border-none">
-            <option value="1">1</option>
+            <option v-for="idx in variationStockItems" value="idx">{{ idx }}</option>
           </select>
         </div>
 
