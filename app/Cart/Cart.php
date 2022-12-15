@@ -65,7 +65,7 @@ class Cart implements CartInterface
     protected function instance()
     {
         if (!isset($this->instance)) {
-            $this->instance = ModelsCart::with(['variations', 'variations.media'])
+            $this->instance = ModelsCart::with(['variations', 'variations.media', 'variations.product:id,title'])
                 ->whereUuid(
                     $this->session->get(
                         config('cart.session.key')

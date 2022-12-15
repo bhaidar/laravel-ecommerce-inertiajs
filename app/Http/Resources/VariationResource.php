@@ -22,6 +22,7 @@ class VariationResource extends JsonResource
             'parentId' => $this->parent_id,
             'price' => $this->price,
             'productId' => $this->product_id,
+            'productTitle' => $this->whenLoaded('product') ? $this->product->title : '',
             'sku' => $this->sku,
             'title' => $this->title,
             'type' => $this->type,

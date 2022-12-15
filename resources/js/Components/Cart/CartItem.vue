@@ -7,7 +7,7 @@ const props = defineProps({
 });
 
 const variationImage = computed(() => props.item?.medias?.[0]?.originalImage);
-const variationTitle = computed(() => props.item?.title);
+const productTitle = computed(() => props.item?.productTitle);
 const variationPrice = computed(() => props.item?.price?.formatted);
 </script>
 
@@ -23,7 +23,7 @@ const variationPrice = computed(() => props.item?.price?.formatted);
           {{ variationPrice }}
         </div>
         <div class="space-y-1">
-          <div>{{ variationTitle }}</div>
+          <div>{{ productTitle }}</div>
 
           <div class="flex items-center text-sm">
             Variation specifics
