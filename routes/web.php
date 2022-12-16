@@ -20,6 +20,8 @@ Route::prefix('/cart')
     ->group(function () {
         Route::get('/', CartController::class)->name('cart.index');
         Route::post('/variations', [CartVariationController::class, 'store'])->name('cart.variations.store');
+        Route::patch('/variations/{variation}', [CartVariationController::class, 'update'])->name('cart.variations.update');
+
 //        Route::delete('/products/{product:slug}', [CartProductController::class, 'destroy'])->name(
 //            'cart.products.destroy'
 //        );

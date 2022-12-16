@@ -1,5 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
+import debounce from 'lodash/debounce';
+import { Inertia } from '@inertiajs/inertia'
 import LinkButton from "@/Components/LinkButton.vue";
 
 const props = defineProps({
@@ -8,9 +10,13 @@ const props = defineProps({
 
 const selectedQuantity = ref(props.item?.quantity);
 
-watch(selectedQuantity, (newQuantity) => {
-  console.log(newQuantity);
-});
+const debouncedWatch = debounce((newValue, oldValue) => {
+  Inertia.patch(route('cart.variations.update', { variation: props?.item?.id }), {
+    variation: props?.item?.id,
+    quantity: selectedQuantity.value,
+  })}, 200);
+
+watch(selectedQuantity, (...args) => debouncedWatch(...args));
 
 const variationAncestors = computed(() => props.item?.ancestorsAndSelf);
 const variationImage = computed(() => props.item?.medias?.[0]?.originalImage);

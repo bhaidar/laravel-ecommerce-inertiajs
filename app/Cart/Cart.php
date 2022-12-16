@@ -26,6 +26,35 @@ class Cart implements CartInterface
         return $this->session->has(config('cart.session.key'));
     }
 
+    public function add($variation, int $quantity = 1)
+    {
+        // Increment quantity when a variation already exists in the cart
+        if ($existingVariation = $this->getVariation($variation)) {
+            $quantity += $existingVariation->pivot->quantity;
+        }
+
+        $this->instance()->variations()->sync(
+            ids: [
+                $variation->id => [
+                    // Allow adding the max in stock
+                    'quantity' => min($quantity, $variation->stockCount()),
+                ],
+            ],
+            detaching: false
+        );
+    }
+
+    public function changeQuantity(Variation $variation, int $quantity)
+    {
+        $this->instance()->variations()->updateExistingPivot(
+            id: $variation->id,
+            attributes: [
+                // Allow adding the max in stock
+                'quantity' => min($quantity, $variation->stockCount()),
+            ],
+        );
+    }
+
     public function create(?User $user = null)
     {
         $instance = ModelsCart::query()->make();
@@ -45,27 +74,7 @@ class Cart implements CartInterface
         return $this->instance()->variations;
     }
 
-    public function add($variation, int $quantity = 1)
-    {
-        // Increment quantity when a variation already exists in the cart
-        if ($existingVariation = $this->getVariation($variation)) {
-             $quantity += $existingVariation->pivot->quantity;
-        }
-
-        $this->instance()->variations()->syncWithoutDetaching([
-            $variation->id => [
-                // Allow adding the max in stock
-                'quantity' => min($quantity,$variation->stocks->sum('amount')),
-            ],
-        ]);
-    }
-
-    protected function getVariation($variation)
-    {
-        return $this->instance()->variations->find($variation->id);
-    }
-
-    protected function instance()
+    protected function instance(): ModelsCart
     {
         if (!isset($this->instance)) {
             $this->instance = $this->getCart->execute($this->session);
@@ -73,4 +82,11 @@ class Cart implements CartInterface
 
         return $this->instance;
     }
+
+    protected function getVariation($variation)
+    {
+        return $this->instance()->variations->find($variation->id);
+    }
+
+
 }
