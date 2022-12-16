@@ -15,6 +15,7 @@ class GetCart
             'variations.media',
             'variations.product:id,title',
             'variations.stocks',
+            'variations.ancestorsAndSelf',
         ])
             ->whereUuid($session->get(config('cart.session.key')))
             ->firstOrFail();

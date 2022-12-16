@@ -6,6 +6,7 @@ const props = defineProps({
   item: Object,
 });
 
+const variationAncestors = computed(() => props.item?.ancestorsAndSelf);
 const variationImage = computed(() => props.item?.medias?.[0]?.originalImage);
 const productTitle = computed(() => props.item?.productTitle);
 const variationPrice = computed(() => props.item?.price?.formatted);
@@ -29,7 +30,10 @@ const variationStockItems = computed(() => {
           <div>{{ productTitle }}</div>
 
           <div class="flex items-center text-sm">
-            Variation ancestors
+            <div v-for="(variation, idx) in variationAncestors" :key="variation.id">
+              {{ variation?.title }}
+              <span v-if="idx !== variationAncestors?.length - 1" class="text-gray-400 mx-1">/</span>
+            </div>
           </div>
         </div>
       </div>
