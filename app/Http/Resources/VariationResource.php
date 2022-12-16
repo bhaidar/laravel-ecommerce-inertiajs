@@ -27,6 +27,7 @@ class VariationResource extends JsonResource
             'stockFigures' => $this->stockFigures ?? [],
             'title' => $this->title,
             'type' => $this->type,
+            'quantity' => $this->relationLoaded('pivot') ? $this->pivot->quantity : 0,
             'ancestorsAndSelf' => VariationResource::collection($this->whenLoaded('ancestorsAndSelf')),
             'children' => VariationResource::collection($this->whenLoaded('children')),
         ];

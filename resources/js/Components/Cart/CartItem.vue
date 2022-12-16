@@ -1,9 +1,15 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import LinkButton from "@/Components/LinkButton.vue";
 
 const props = defineProps({
   item: Object,
+});
+
+const selectedQuantity = ref(props.item?.quantity);
+
+watch(selectedQuantity, (newQuantity) => {
+  console.log(newQuantity);
 });
 
 const variationAncestors = computed(() => props.item?.ancestorsAndSelf);
@@ -41,8 +47,8 @@ const variationStockItems = computed(() => {
       <div class="flex items-center space-x-4">
         <div class="text-sm flex items-center space-x-2">
           <div class="font-semibold">Quantity</div>
-          <select class="text-sm border-none">
-            <option v-for="idx in variationStockItems" value="idx">{{ idx }}</option>
+          <select class="text-sm border-none" v-model="selectedQuantity">
+            <option v-for="idx in variationStockItems" :value="idx">{{ idx }}</option>
           </select>
         </div>
 
