@@ -30,7 +30,8 @@ class ShowProduct
     {
         $product->setRelation(
             'variations',
-            Variation::with(['stocks'])
+            Variation::query()
+                ->with('stocks')
                 ->treeOf(fn($query) => $query->isRoot()->where('product_id', $product->id))
                 ->get()
                 ->toTree()

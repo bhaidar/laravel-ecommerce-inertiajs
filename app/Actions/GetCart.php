@@ -10,13 +10,13 @@ class GetCart
 {
     public function execute(SessionManager $session): ModelsCart
     {
-        $instance = ModelsCart::with([
-            'variations',
-            'variations.media',
-            'variations.product:id,title',
-            'variations.stocks',
-            'variations.ancestorsAndSelf',
-        ])
+        $instance = ModelsCart::query()
+            ->with([
+                'variations.media',
+                'variations.product:id,title',
+                'variations.stocks',
+                'variations.ancestorsAndSelf',
+            ])
             ->whereUuid($session->get(config('cart.session.key')))
             ->firstOrFail();
 
