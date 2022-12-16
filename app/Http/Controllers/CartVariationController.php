@@ -32,7 +32,7 @@ class CartVariationController extends Controller
             $cart->add($variation, Request::input('quantity', 1));
 
             // Prepare a success notification message
-            $request->success();
+            $request->success($variation);
         }
         catch (Exception $ex)
         {
