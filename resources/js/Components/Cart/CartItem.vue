@@ -25,6 +25,10 @@ const variationPrice = computed(() => props.item?.price?.formatted);
 const variationStockItems = computed(() => {
   return Array.from({length: props.item?.stockFigures?.stockCount}, (_, i) => i + 1);
 });
+
+const onRemoveItem = () => {
+  Inertia.delete(route('cart.variations.destroy', props?.item));
+};
 </script>
 
 <template>
@@ -58,7 +62,7 @@ const variationStockItems = computed(() => {
           </select>
         </div>
 
-        <LinkButton class="text-sm">
+        <LinkButton class="text-sm" @click.prevent="onRemoveItem">
           Remove
         </LinkButton>
       </div>

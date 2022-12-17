@@ -4,6 +4,7 @@ namespace App\Cart;
 
 use App\Actions\GetCart;
 use App\Cart\Contracts\CartInterface;
+use App\Http\Resources\CartResource;
 use App\Models\User;
 use App\Models\Variation;
 use Illuminate\Database\Eloquent\Collection;
@@ -69,9 +70,24 @@ class Cart implements CartInterface
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 
+    public function formattedSubtotal(): string
+    {
+        return '$0';
+    }
+
     public function items()
     {
         return $this->instance()->variations;
+    }
+
+    public function remove(Variation $variation)
+    {
+        $this->instance()->variations()->detach($variation);
+    }
+
+    public function toResource(): CartResource
+    {
+        return new CartResource($this);
     }
 
     protected function instance(): ModelsCart

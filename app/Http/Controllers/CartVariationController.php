@@ -63,4 +63,21 @@ class CartVariationController extends Controller
 
         return redirect()->back()->with('notification', $request->notification);
     }
+
+    /**
+     * @param Variation $variation
+     * @return RedirectResponse
+     */
+    public function destroy(CartInterface $cart, Variation $variation): RedirectResponse
+    {
+        $cart->remove($variation);
+
+        $notification = [
+            'title' => "Item removed",
+            'message' => 'Your item was successfully removed!',
+            'color' => 'green',
+        ];
+
+        return redirect()->back()->with('notification', $notification);
+    }
 }

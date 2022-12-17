@@ -47,19 +47,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'cart' => function () {
-                try {
-                    $items = $this->cart->items();
-                } catch (ModelNotFoundException $e) {
-                    Log::error($e->getMessage());
-                    return null;
-                }
-                return [
-                    'items' => VariationResource::collection($items),
-                    'count' => $items->count() ?? 0,
-                    'total' => $items->sum(fn ($variation) => $variation->pivot->quantity),
-                ];
-            },
+            'cart' => fn () => $this->cart->toResource(),
             'flash' => [
                 'notification' => fn () => $request->session()->get('notification')
             ],

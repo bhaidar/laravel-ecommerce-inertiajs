@@ -10,7 +10,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 const username = computed(() => usePage().props.value?.auth?.user?.name);
 const email = computed(() => usePage().props.value?.auth?.user?.email);
 const isGuest = computed(() => !usePage().props.value?.auth?.user);
-const cartCount = computed(() => usePage().props.value?.cart?.count);
+const cartCount = computed(() => usePage().props.value?.cart?.data.count);
 
 const showingNavigationDropdown = ref(false);
 </script>
