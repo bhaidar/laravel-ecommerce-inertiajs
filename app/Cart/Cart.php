@@ -70,9 +70,15 @@ class Cart implements CartInterface
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 
-    public function formattedSubtotal(): string
+    public function formattedSubTotal(): string
     {
-        return '$0';
+        $subTotal = $this->instance()
+            ->variations
+            ->reduce(function ($carry, $variation) {
+                return ($carry + ($variation->price->getAmount() * $variation->pivot->quantity));
+            }, 0);
+
+        return money($subTotal);
     }
 
     public function items()

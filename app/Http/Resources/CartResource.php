@@ -20,7 +20,7 @@ class CartResource extends JsonResource
         return [
             'items' => VariationResource::collection($items),
             'count' => $items->count() ?? 0,
-            'subTotal' => $this->formattedSubtotal(),
+            'subTotal' => $this->formattedSubTotal(),
         ];
     }
 }

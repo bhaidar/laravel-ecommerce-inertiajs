@@ -20,15 +20,13 @@ const subTotal = computed(() => props.cart?.data?.subTotal);
       </div>
       <div class="p-6 bg-white border-b border-gray-200 col-span-2 self-start">
         <div class="space-y-4">
-          <div class="space-y-1">
-              <div class="space-y-1 flex items-center justify-center">
-                <div class="font-semibold">Subtotal</div>
-                <h1 class="font-semibold text-xl">
-                  {{ subTotal }}
-                </h1>
-              </div>
-              <LinkButton href="#">Checkout</LinkButton>
+          <div class="space-y-1 flex items-center justify-between">
+            <div class="font-semibold">Subtotal</div>
+            <h1 class="font-semibold text-xl">
+                {{ subTotal }}
+            </h1>
           </div>
+          <LinkButton href="#">Checkout</LinkButton>
         </div>
       </div>
     </div>
