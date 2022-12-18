@@ -14,7 +14,6 @@ const productTitle = computed(() => props.product?.data?.title);
 </script>
 
 <template>
-  <div>
   <AppLayout>
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -42,5 +41,4 @@ const productTitle = computed(() => props.product?.data?.title);
       </div>
     </div>
   </AppLayout>
-  </div>
 </template>

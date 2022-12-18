@@ -14,7 +14,7 @@ const children = (category) => category?.children;
 
 <template>
   <div v-for="category in categories" :key="slug(category)">
-    <Link href="#" :class="{ 'font-bold': depthZero(category) }">{{ title(category) }}</Link>
+    <Link :href="route('categories.show', category)" :class="{ 'font-bold': depthZero(category) }">{{ title(category) }}</Link>
 
     <div class="ml-4 my-2" v-if="hasChildren(category)">
       <category :categories="children(category)" />

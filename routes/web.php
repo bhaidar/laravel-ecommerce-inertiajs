@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartVariationController;
+use App\Http\Controllers\CategoryShowController;
 use App\Http\Controllers\ProductShowController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -10,11 +11,13 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::get('/products/{product:slug}', ProductShowController::class);
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/products/{product:slug}', ProductShowController::class);
+
+Route::get('/categories/{category:slug}', CategoryShowController::class)->name('categories.show');
 
 Route::prefix('/cart')
     ->group(function () {
