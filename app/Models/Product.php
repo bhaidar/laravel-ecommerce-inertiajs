@@ -8,6 +8,7 @@ use App\Traits\HasImages;
 use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -23,6 +24,7 @@ class Product extends Model implements HasMedia
     use HasFormattedPrice;
     use InteractsWithMedia;
     use HasImages;
+    use Searchable;
 
     protected const CONVERSION_NAME = 'thumb200x200';
 
