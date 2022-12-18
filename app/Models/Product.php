@@ -8,6 +8,7 @@ use App\Traits\HasImages;
 use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -27,6 +28,11 @@ class Product extends Model implements HasMedia
     use Searchable;
 
     protected const CONVERSION_NAME = 'thumb200x200';
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
 
     public function loadStock(): void
     {
@@ -51,6 +57,22 @@ class Product extends Model implements HasMedia
         $this
             ->addMediaCollection('default')
             ->useFallbackUrl(url('/images/no_image_available.jpg'));
+    }
+
+    /**
+     * Decide which fields appear on meilisearch
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'price' => $this->price->getAmount(), // price is a Money instance
+            //'categories' => $this->categories->pluck('id'),
+        ];
     }
 
     public function toResource(): ProductResource
