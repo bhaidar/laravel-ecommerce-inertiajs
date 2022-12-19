@@ -8,6 +8,7 @@ const props = defineProps({
 });
 
 const products = computed(() => props?.products);
+const productCount = computed(() => products?.value.length);
 
 const formattedPrice = (product) => product?.price?.formatted;
 const productImage = (product) => product?.medias?.[0]?.originalImage;
@@ -47,7 +48,7 @@ const productDescription = (product) => product?.description;
     </div>
     <div class="col-span-5 sm:px-6 lg:px-8">
       <div class="mb-6">
-        Found 0 products matching your filters
+        Found {{ productCount }} products matching your filters
       </div>
 
       <div class="overflow-hidden sm:rounded-lg grid lg:grid-cols-3 md:grid-cols-2 gap-4">
