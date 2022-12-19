@@ -1,9 +1,4 @@
 /node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
 .env
 .env.backup
 .env.production
@@ -16,3 +11,38 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+
+
+# Recommended template: Node.gitignore
+
+node_modules/
+/public/build
+/vendor
+dist/
+
+npm-debug.log
+yarn-error.log
+npm-debug.log
+yarn-error.log
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
+
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
+
+storage/*.key
+.env
+Homestead.yaml
+Homestead.json
+/.vagrant
+.phpunit.result.cache
+
+# End of https://mrkandreev.name/snippets/gitignore-generator/#Vuejs,Laravel
