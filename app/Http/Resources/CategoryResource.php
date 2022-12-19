@@ -18,6 +18,7 @@ class CategoryResource extends JsonResource
             'ancestors' => CategoryResource::collection($this->whenLoaded('ancestors')),
             'children' => CategoryResource::collection($this->whenLoaded('children')),
             'depth' => $this->depth,
+            'products' => ProductResource::collection($this->whenLoaded('products')),
             'slug' => $this->slug,
             'title' => $this->title,
         ];

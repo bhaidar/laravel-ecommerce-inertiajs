@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
+import ProductBrowser from "@/Components/Products/ProductBrowser.vue";
 
 const props = defineProps({
   category: Object,
@@ -28,6 +29,8 @@ const ancestorTitle = (category) => category?.title;
         </h2>
       </div>
     </template>
-    Product browser
+
+    <ProductBrowser :category="category.data" />
+
   </AppLayout>
 </template>

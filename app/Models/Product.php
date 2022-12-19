@@ -71,7 +71,7 @@ class Product extends Model implements HasMedia
             'title' => $this->title,
             'slug' => $this->slug,
             'price' => $this->price->getAmount(), // price is a Money instance
-            //'categories' => $this->categories->pluck('id'),
+            'categories' => $this->categories->pluck('id'),
         ];
     }
 
