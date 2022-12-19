@@ -3,26 +3,36 @@
 namespace App\Actions;
 
 use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Support\Collection;
+use Meilisearch\Endpoints\Indexes;
+use Illuminate\Http\Request;
 
 class ShowCategory
 {
-    public function execute(Category $category): Category
+    public function execute(Request $request, Category $category): array
     {
         $category->load('ancestors');
 
-        // prepare media urls
-        $this->loadMedia($category);
+        $products = Product::search(
+            query: trim($request->get('search')) ?? '',
+            callback: function (Indexes $meilisearch, string $query, array $options) use ($category) {
+                $options['filter'] = 'category_ids = ' . $category->id;
 
-        return $category;
+                return $meilisearch->search($query, $options);
+            },
+        )->get();
+
+        // prepare media urls
+        $this->loadMedia($products);
+
+        return compact('category', 'products');
     }
 
-    private function loadMedia(Category $category): void
+    private function loadMedia(Collection $products): void
     {
-        // Load media for all products using one query
-        $category->load('products.media');
-
-        // Prepare the product media
-        $category->products->each->getMediaUrls();
+        $products->load('media');
+        $products->each->getMediaUrls();
     }
 
     private function preloadProductsOnVariation($product): void

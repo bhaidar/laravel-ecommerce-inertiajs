@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartVariationController;
 use App\Http\Controllers\CategoryShowController;
 use App\Http\Controllers\ProductShowController;
+use App\Http\Controllers\SearchController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -16,7 +17,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/products/{product:slug}', ProductShowController::class)->name('products.show');
-
 Route::get('/categories/{category:slug}', CategoryShowController::class)->name('categories.show');
 
 Route::prefix('/cart')

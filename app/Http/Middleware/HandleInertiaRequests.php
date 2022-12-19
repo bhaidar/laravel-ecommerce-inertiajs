@@ -7,6 +7,7 @@ use App\Http\Resources\VariationResource;
 use App\Models\Cart as ModelsCart;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Middleware;
 use Log;
 use Tightenco\Ziggy\Ziggy;

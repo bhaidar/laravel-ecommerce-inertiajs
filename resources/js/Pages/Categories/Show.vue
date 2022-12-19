@@ -1,11 +1,13 @@
 <script setup>
-import { computed } from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductBrowser from "@/Components/Products/ProductBrowser.vue";
+import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps({
   category: Object,
+  products: Object,
 });
 
 const categoryTitle = computed(() => props?.category?.data?.title);
@@ -30,7 +32,7 @@ const ancestorTitle = (category) => category?.title;
       </div>
     </template>
 
-    <ProductBrowser :category="category.data" />
+    <ProductBrowser :category="category" :products="products.data" />
 
   </AppLayout>
 </template>

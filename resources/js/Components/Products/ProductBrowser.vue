@@ -4,11 +4,14 @@ import { Link } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
   category: Object,
+  products: Object,
 });
 
-const products = computed(() => props?.category?.products);
+const products = computed(() => props?.products);
 
 const formattedPrice = (product) => product?.price?.formatted;
+const productImage = (product) => product?.medias?.[0]?.originalImage;
+const productDescription = (product) => product?.description;
 </script>
 
 <template>
@@ -52,7 +55,8 @@ const formattedPrice = (product) => product?.price?.formatted;
             v-for="product in products" :key="product.slug"
             :href="route('products.show', product)"
             class="p-6 bg-white border-b border-gray-200 space-y-4">
-          <img src="" class="w-full" alt="">
+
+          <img :src="productImage(product)" class="w-full" :alt="productDescription(product)">
 
           <div class="space-y-1">
             <div>{{ product?.title }}</div>
@@ -60,6 +64,7 @@ const formattedPrice = (product) => product?.price?.formatted;
               {{ formattedPrice(product) }}
             </div>
           </div>
+
         </Link>
       </div>
     </div>

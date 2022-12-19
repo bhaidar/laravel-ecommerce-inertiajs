@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Console\Traits\HasFormattedPrice;
 use App\Http\Resources\ProductResource;
 use App\Traits\HasImages;
-use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -56,7 +55,7 @@ class Product extends Model implements HasMedia
     {
         $this
             ->addMediaCollection('default')
-            ->useFallbackUrl(url('/images/no_image_available.jpg'));
+            ->useFallbackUrl(url('/images/no_image_available.png'));
     }
 
     /**
@@ -70,8 +69,14 @@ class Product extends Model implements HasMedia
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'price' => $this->price->getAmount(), // price is a Money instance
-            'categories' => $this->categories->pluck('id'),
+            'description' => $this->description,
+            'category_ids' => $this->categories->pluck('id'),
+        ];
+    }
+    public static function getSearchFilterAttributes(): array
+    {
+        return [
+            'category_ids',
         ];
     }
 
