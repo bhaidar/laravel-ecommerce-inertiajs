@@ -8,6 +8,7 @@ use App\Traits\HasImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -31,6 +32,11 @@ class Product extends Model implements HasMedia
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function variations(): HasMany
+    {
+        return $this->HasMany(Variation::class);
     }
 
     public function loadStock(): void
@@ -65,13 +71,18 @@ class Product extends Model implements HasMedia
      */
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'slug' => $this->slug,
-            'description' => $this->description,
-            'category_ids' => $this->categories->pluck('id'),
-        ];
+        return array_merge(
+            [
+                'id' => $this->id,
+                'title' => $this->title,
+                'slug' => $this->slug,
+                'description' => $this->description,
+                'category_ids' => $this->categories->pluck('id'),
+            ],
+            $this->variations->groupBy('type')
+            ->mapWithKeys(fn ($variations, $key) => [$key => $variations->pluck('title')])
+            ->toArray(),
+        );
     }
     public static function getSearchFilterAttributes(): array
     {
