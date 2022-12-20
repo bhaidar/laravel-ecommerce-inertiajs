@@ -12,7 +12,7 @@ class ShowCategory
 {
     public function execute(Request $request, Category $category): array
     {
-        $category->load('ancestors');
+        $category->load(['ancestors', 'children']);
 
         $products = Product::search(
             query: trim($request->get('search')) ?? '',

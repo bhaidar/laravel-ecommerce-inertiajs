@@ -7,6 +7,8 @@ const props = defineProps({
   products: Object,
 });
 
+const categoryChildren = computed(() => props?.category?.data?.children);
+const hasChildren = computed(() => props?.category?.data?.children?.length > 0);
 const products = computed(() => props?.products);
 const productCountMessage = computed(() => {
   const productCount = products?.value.length;
@@ -23,12 +25,12 @@ const productDescription = (product) => product?.description;
   <div class="mx-auto sm:px-6 lg:px-8 max-w-7xl py-12 grid grid-cols-6 gap-4">
     <div class="col-span-1">
       <div class="space-y-6">
-        <div class="space-y-1">
+        <div class="space-y-1" v-if="hasChildren">
           <ul>
-            <li>
-              <a href="" class="text-indigo-500">
-                Category child
-              </a>
+            <li v-for="child in categoryChildren" :key="child.slug">
+              <Link :href="route('categories.show', child)" class="text-indigo-500">
+                {{  child.title }}
+              </Link>
             </li>
           </ul>
         </div>
