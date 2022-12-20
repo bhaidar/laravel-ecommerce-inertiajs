@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -80,7 +81,7 @@ class Product extends Model implements HasMedia
                 'category_ids' => $this->categories->pluck('id'),
             ],
             $this->variations->groupBy('type')
-            ->mapWithKeys(fn ($variations, $key) => [$key => $variations->pluck('title')])
+            ->mapWithKeys(fn ($variations, $key) => [ $key => $variations->pluck('title')])
             ->toArray(),
         );
     }
@@ -88,6 +89,8 @@ class Product extends Model implements HasMedia
     {
         return [
             'category_ids',
+            'size',
+            'color',
         ];
     }
 

@@ -8,10 +8,14 @@ import {Inertia} from "@inertiajs/inertia";
 const props = defineProps({
   category: Object,
   products: Object,
+  filters: Object,
 });
 
 const categoryTitle = computed(() => props?.category?.data?.title);
 const categoryAncestors = computed(() => props?.category?.data?.ancestors?.reverse());
+const categoryData = computed(() => props?.category?.data);
+const searchFilters = computed(() => props?.filters?.data);
+const productData = computed(() => props?.products?.data);
 
 const ancestorTitle = (category) => category?.title;
 </script>
@@ -32,7 +36,7 @@ const ancestorTitle = (category) => category?.title;
       </div>
     </template>
 
-    <ProductBrowser :category="category" :products="products.data" />
+    <ProductBrowser :category="categoryData" :products="productData" :filters="searchFilters" />
 
   </AppLayout>
 </template>

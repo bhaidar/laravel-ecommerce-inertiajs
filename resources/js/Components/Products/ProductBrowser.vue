@@ -5,10 +5,11 @@ import { Link } from '@inertiajs/inertia-vue3';
 const props = defineProps({
   category: Object,
   products: Object,
+  filters: Object,
 });
 
-const categoryChildren = computed(() => props?.category?.data?.children);
-const hasChildren = computed(() => props?.category?.data?.children?.length > 0);
+const categoryChildren = computed(() => props?.category?.children);
+const hasChildren = computed(() => props?.category?.children?.length > 0);
 const products = computed(() => props?.products);
 const productCountMessage = computed(() => {
   const productCount = products?.value.length;
@@ -19,6 +20,7 @@ const productCountMessage = computed(() => {
 const formattedPrice = (product) => product?.price?.formatted;
 const productImage = (product) => product?.medias?.[0]?.originalImage;
 const productDescription = (product) => product?.description;
+const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, "");
 </script>
 
 <template>
@@ -43,10 +45,10 @@ const productDescription = (product) => product?.description;
             </div>
           </div>
 
-          <div class="space-y-1">
-            <div class="font-semibold">Filter title</div>
-            <div class="flex items-center space-x-2">
-              <input type="checkbox" id="" value=""> <label for="">Filter (count)</label>
+          <div class="space-y-1" v-for="(filterBucket, filterProp) in filters" :key="props">
+            <div class="font-semibold">{{  filterProp }}</div>
+            <div class="flex items-center space-x-2" v-for="(filterValue, filterKey) in filterBucket" :key="filterKey">
+              <input type="checkbox" :id="cleanFilter(filterKey)" :value="cleanFilter(filterKey)"> <label :for="cleanFilter(filterKey)">{{  cleanFilter(filterKey)  }} ({{ filterValue }})</label>
             </div>
           </div>
         </div>

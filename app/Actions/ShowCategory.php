@@ -14,29 +14,40 @@ class ShowCategory
     {
         $category->load(['ancestors', 'children']);
 
-        $products = Product::search(
+        list('products' => $products, 'filters' => $filters) = $this->loadProducts($request, $category);
+
+        return compact('category', 'products', 'filters');
+    }
+
+    private function loadProducts(Request $request, Category $category)
+    {
+        $search = Product::search(
             query: trim($request->get('search')) ?? '',
             callback: function (Indexes $meilisearch, string $query, array $options) use ($category) {
                 $options['filter'] = 'category_ids = ' . $category->id;
+                $options['facets'] = ['size', 'color'];
 
                 return $meilisearch->search($query, $options);
             },
-        )->get();
+        )->raw(); // coming from meilisearch
+
+        // Load eloquent models
+        $products = $category
+            ->products()
+            ->with('media')
+            ->find(collect($search['hits'])->pluck('id'));
 
         // prepare media urls
         $this->loadMedia($products);
 
-        return compact('category', 'products');
+        return [
+            'products' => $products,
+            'filters' => $search['facetDistribution'],
+        ];
     }
 
     private function loadMedia(Collection $products): void
     {
-        $products->load('media');
         $products->each->getMediaUrls();
-    }
-
-    private function preloadProductsOnVariation($product): void
-    {
-        $product->variations->each->setRelation('product', $product);
     }
 }
