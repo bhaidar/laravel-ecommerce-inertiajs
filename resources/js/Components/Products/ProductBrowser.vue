@@ -1,31 +1,44 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, reactive, watch } from 'vue';
+import debounce from 'lodash/debounce';
 import { Link } from '@inertiajs/inertia-vue3';
 
+// Events
+const emit = defineEmits(['filtersChange']);
+
+// Props
 const props = defineProps({
   category: Object,
   products: Object,
   filters: Object,
 });
 
-const queryFilters = ref(Array.from(Object.keys(props?.filters), (key) => ({ [key.toLocaleLowerCase()]: [] })));
+// Refs
+const queryFilters = reactive(Array.from(Object.keys(props?.filters), (key) => ({ [key.toLocaleLowerCase()]: [] })));
 
+// Computed
 const categoryChildren = computed(() => props?.category?.children);
 const hasChildren = computed(() => props?.category?.children?.length > 0);
 const products = computed(() => props?.products);
 const productCountMessage = computed(() => {
   const productCount = products?.value.length;
-
   return `Found ${ productCount } product${ productCount > 1 ? 's' : ''} matching your filters`;
 });
 const hydratedFilters = computed(() => JSON.parse(cleanFilter(JSON.stringify(props?.filters).toLocaleLowerCase())));
 
+// Functions
 const formattedPrice = (product) => product?.price?.formatted;
 const productImage = (product) => product?.medias?.[0]?.originalImage;
 const productDescription = (product) => product?.description;
 const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, "");
 const getId = (titleKey, filterKey) => `${titleKey}_${filterKey}`;
 
+// Watch
+const debouncedWatch = debounce((filters) => {
+  emit('filtersChange', filters);
+}, 200);
+
+watch(() => ({ ...queryFilters }), (...args) => debouncedWatch(...args), { deep: true });
 </script>
 
 <template>
@@ -43,7 +56,6 @@ const getId = (titleKey, filterKey) => `${titleKey}_${filterKey}`;
         </div>
 
         <div class="space-y-6">
-          {{ queryFilters }}
           <div class="space-y-1">
             <div class="font-semibold">Max price ($0)</div>
             <div class="flex items-center space-x-2">

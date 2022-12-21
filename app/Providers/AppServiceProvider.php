@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Http\Resources\VariationResource;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->isLocal()) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(IdeHelperServiceProvider::class);
         }
     }
 
@@ -26,5 +27,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Collection::macro('recursive', function () {
+            return $this->map( function($value) {
+                if (is_array($value) || is_object($value))
+                {
+                    return collect($value)->recursive();
+                }
+
+                return $value;
+            });
+        });
     }
 }

@@ -10,7 +10,7 @@ const props = defineProps({
 
 const selectedQuantity = ref(props.item?.quantity);
 
-const debouncedWatch = debounce((newValue, oldValue) => {
+const debouncedWatch = debounce(() => {
   Inertia.patch(route('cart.variations.update', { variation: props?.item?.id }), {
     variation: props?.item?.id,
     quantity: selectedQuantity.value,

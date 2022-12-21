@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\ShowCategory;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\FilterResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -22,7 +24,7 @@ class CategoryShowController extends Controller
         $search = $showCategory->execute($request, $category);
 
         return Inertia::render('Categories/Show', [
-            'category' => $search['category']->toResource(),
+            'category' => new CategoryResource($search['category']),
             'products' => ProductResource::collection($search['products']),
             'filters' => new FilterResource($search['filters']),
         ]);

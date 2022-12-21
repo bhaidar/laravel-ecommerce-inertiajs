@@ -28,8 +28,6 @@ const onVariationChanged = function(variation) {
   emit('variationChanged', variation?.sku ? variation : null);
 };
 
-const variationStockCount = (variation) => variation?.stockFigures?.stockCount;
-const variationInStock = (variation) => variation?.stockFigures?.inStock;
 const variationOutOfStock = (variation) => variation?.stockFigures?.outOfStock;
 const variationLowStock = (variation) => variation?.stockFigures?.lowStock;
 </script>

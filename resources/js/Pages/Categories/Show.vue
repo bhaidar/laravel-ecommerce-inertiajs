@@ -18,6 +18,12 @@ const searchFilters = computed(() => props?.filters?.data);
 const productData = computed(() => props?.products?.data);
 
 const ancestorTitle = (category) => category?.title;
+const onFiltersChanged = (filters) => {
+  Inertia.get(route('categories.show',  props?.category.data), { filters }, {
+    replace: true,
+    preserveState: true
+  });
+};
 </script>
 
 <template>
@@ -36,7 +42,11 @@ const ancestorTitle = (category) => category?.title;
       </div>
     </template>
 
-    <ProductBrowser :category="categoryData" :products="productData" :filters="searchFilters" />
-
+    <ProductBrowser
+        :category="categoryData"
+        :products="productData"
+        :filters="searchFilters"
+        @filters-change="onFiltersChanged"
+    />
   </AppLayout>
 </template>
