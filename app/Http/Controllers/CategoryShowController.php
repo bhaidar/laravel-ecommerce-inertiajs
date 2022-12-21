@@ -9,6 +9,7 @@ use App\Models\Category;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use stdClass;
 
 class CategoryShowController extends Controller
 {

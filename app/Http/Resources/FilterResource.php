@@ -26,6 +26,8 @@ class FilterResource extends JsonResource
 
                 // Make filter array keys as string
                 $filter = collect($filter)->mapWithKeys(function ($filterValue, $filterKey) use ($key) {
+                    // A hacky way to convert int-keys to string-keys
+                    // On the frontend, I will replace [ and ] with empty string for display
                     return [Str::title('[' . $filterKey . ']') => $filterValue];
                 });
 

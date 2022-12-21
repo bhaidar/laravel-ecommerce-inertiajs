@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
@@ -7,6 +7,8 @@ const props = defineProps({
   products: Object,
   filters: Object,
 });
+
+const queryFilters = ref(Array.from(Object.keys(props?.filters), (key) => ({ [key.toLocaleLowerCase()]: [] })));
 
 const categoryChildren = computed(() => props?.category?.children);
 const hasChildren = computed(() => props?.category?.children?.length > 0);
@@ -16,11 +18,14 @@ const productCountMessage = computed(() => {
 
   return `Found ${ productCount } product${ productCount > 1 ? 's' : ''} matching your filters`;
 });
+const hydratedFilters = computed(() => JSON.parse(cleanFilter(JSON.stringify(props?.filters).toLocaleLowerCase())));
 
 const formattedPrice = (product) => product?.price?.formatted;
 const productImage = (product) => product?.medias?.[0]?.originalImage;
 const productDescription = (product) => product?.description;
 const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, "");
+const getId = (titleKey, filterKey) => `${titleKey}_${filterKey}`;
+
 </script>
 
 <template>
@@ -38,6 +43,7 @@ const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, "");
         </div>
 
         <div class="space-y-6">
+          {{ queryFilters }}
           <div class="space-y-1">
             <div class="font-semibold">Max price ($0)</div>
             <div class="flex items-center space-x-2">
@@ -45,10 +51,16 @@ const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, "");
             </div>
           </div>
 
-          <div class="space-y-1" v-for="(filterBucket, filterProp) in filters" :key="props">
-            <div class="font-semibold">{{  filterProp }}</div>
-            <div class="flex items-center space-x-2" v-for="(filterValue, filterKey) in filterBucket" :key="filterKey">
-              <input type="checkbox" :id="cleanFilter(filterKey)" :value="cleanFilter(filterKey)"> <label :for="cleanFilter(filterKey)">{{  cleanFilter(filterKey)  }} ({{ filterValue }})</label>
+          <div class="space-y-1" v-for="(filterBucket, title, idx) in hydratedFilters" :key="props">
+            <div class="font-semibold capitalize">{{  title }}</div>
+            <div class="flex items-center space-x-2" v-for="(value, filterKey) in filterBucket" :key="filterKey">
+              <input
+                  type="checkbox"
+                  :id="getId(title, filterKey)"
+                  :value="filterKey"
+                  v-model="queryFilters[idx][title]"
+              >
+              <label class="capitalize" :for="getId(title, filterKey)">{{  filterKey  }} ({{ value }})</label>
             </div>
           </div>
         </div>
