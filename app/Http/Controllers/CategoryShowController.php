@@ -27,6 +27,7 @@ class CategoryShowController extends Controller
             'category' => new CategoryResource($search['category']),
             'products' => ProductResource::collection($search['products']),
             'filters' => new FilterResource($search['filters']),
+            'query' => collect($search['filters'])->keys()->mapWithKeys(fn ($key) => [$key => []])->toArray(),
         ]);
     }
 }

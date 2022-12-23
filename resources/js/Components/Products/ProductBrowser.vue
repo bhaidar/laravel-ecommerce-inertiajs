@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 import { Link } from '@inertiajs/inertia-vue3';
 
@@ -14,7 +14,9 @@ const props = defineProps({
 });
 
 // Refs
-const queryFilters = reactive(Array.from(Object.keys(props?.filters), (key) => ({ [key.toLocaleLowerCase()]: [] })));
+const queryFilters = reactive(Object.fromEntries(Object.keys(props?.filters).map((e) => [e, []])));
+const maxPrice = ref(Math.max(...props?.products.map(o => o.price.amount)));
+
 
 // Computed
 const categoryChildren = computed(() => props?.category?.children);
@@ -24,13 +26,12 @@ const productCountMessage = computed(() => {
   const productCount = products?.value.length;
   return `Found ${ productCount } product${ productCount > 1 ? 's' : ''} matching your filters`;
 });
-const hydratedFilters = computed(() => JSON.parse(cleanFilter(JSON.stringify(props?.filters).toLocaleLowerCase())));
 
 // Functions
 const formattedPrice = (product) => product?.price?.formatted;
 const productImage = (product) => product?.medias?.[0]?.originalImage;
 const productDescription = (product) => product?.description;
-const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, "");
+const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, '');
 const getId = (titleKey, filterKey) => `${titleKey}_${filterKey}`;
 
 // Watch
@@ -38,7 +39,7 @@ const debouncedWatch = debounce((filters) => {
   emit('filtersChange', filters);
 }, 200);
 
-watch(() => ({ ...queryFilters }), (...args) => debouncedWatch(...args), { deep: true });
+//watch(() => ({ ...queryFilters }), (...args) => debouncedWatch(...args), { deep: true });
 </script>
 
 <template>
@@ -56,23 +57,24 @@ watch(() => ({ ...queryFilters }), (...args) => debouncedWatch(...args), { deep:
         </div>
 
         <div class="space-y-6">
+          {{ queryFilters }}
           <div class="space-y-1">
             <div class="font-semibold">Max price ($0)</div>
             <div class="flex items-center space-x-2">
-              <input type="range" min="0" max="">
+              <input type="range" min="0" :max="maxPrice" v-model="queryFilters.price">
             </div>
           </div>
 
-          <div class="space-y-1" v-for="(filterBucket, title, idx) in hydratedFilters" :key="props">
-            <div class="font-semibold capitalize">{{  title }}</div>
+          <div class="space-y-1" v-for="(filterBucket, title) in filters" :key="props">
+            <div class="font-semibold capitalize">{{ title }}</div>
             <div class="flex items-center space-x-2" v-for="(value, filterKey) in filterBucket" :key="filterKey">
               <input
                   type="checkbox"
                   :id="getId(title, filterKey)"
-                  :value="filterKey"
-                  v-model="queryFilters[idx][title]"
+                  :value="cleanFilter(filterKey)"
+                  v-model="queryFilters[title]"
               >
-              <label class="capitalize" :for="getId(title, filterKey)">{{  filterKey  }} ({{ value }})</label>
+              <label class="capitalize" :for="getId(title, filterKey)">{{  cleanFilter(filterKey)  }} ({{ value }})</label>
             </div>
           </div>
         </div>

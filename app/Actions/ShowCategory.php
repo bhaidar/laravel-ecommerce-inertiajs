@@ -21,7 +21,7 @@ class ShowCategory
 
     private function loadProducts(Request $request, Category $category): array
     {
-        $filters = collect(array_merge(...$request->get('filters') ?? []))
+        $filters = collect($request->get('filters') ?? [])
             ->recursive() // return filter array as Collection
             ->map(function ($value, $key) {
                 return $value->map(fn($value) => $key . ' = "' . $value . '"');
@@ -32,11 +32,11 @@ class ShowCategory
         $search = Product::search(
             query: trim($request->get('search')) ?? '',
             callback: function (Indexes $meilisearch, string $query, array $options) use ($category, $filters) {
-                $searchFilter = $filters;
+                $searchFilter = '';
 
-                if ($searchFilter)
+                if ($filters)
                 {
-                    $searchFilter .= ' AND ';
+                    $searchFilter = $filters . ' AND ';
                 }
 
                 $searchFilter .= 'category_ids = ' . $category->id;

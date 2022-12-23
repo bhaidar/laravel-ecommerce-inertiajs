@@ -78,6 +78,7 @@ class Product extends Model implements HasMedia
                 'title' => $this->title,
                 'slug' => $this->slug,
                 'description' => $this->description,
+                'price' => $this->price->getAmount(),
                 'category_ids' => $this->categories->pluck('id'),
             ],
             $this->variations->groupBy('type')
@@ -91,6 +92,7 @@ class Product extends Model implements HasMedia
             'category_ids',
             'size',
             'color',
+            'price',
         ];
     }
 
