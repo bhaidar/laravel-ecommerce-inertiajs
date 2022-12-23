@@ -23,6 +23,7 @@ const price = ref(props?.maxPrice?.amount);
 const categoryChildren = computed(() => props?.category?.children);
 const hasChildren = computed(() => props?.category?.children?.length > 0);
 const products = computed(() => props?.products);
+const hasProducts = computed(() => props?.products?.length > 0);
 const productCountMessage = computed(() => {
   const productCount = products?.value.length;
   return `Found ${ productCount } product${ productCount > 1 ? 's' : ''} matching your filters`;
@@ -61,17 +62,15 @@ watch([() => ({ ...queryFilters }), price], (...args) => debouncedWatch(...args)
             </li>
           </ul>
         </div>
-
         <div class="space-y-6">
-          {{ price }}
           <div class="space-y-1">
             <div class="font-semibold">Max price ({{ maxProductPriceFormatted }})</div>
             <div class="flex items-center space-x-2">
               <input type="range" min="0" :max="maxProductPrice" v-model="price">
             </div>
           </div>
-
-          <div class="space-y-1" v-for="(filterBucket, title) in filters" :key="props">
+          <div v-if="hasProducts">
+            <div class="space-y-1" v-for="(filterBucket, title) in filters" :key="props">
             <div class="font-semibold capitalize">{{ title }}</div>
             <div class="flex items-center space-x-2" v-for="(value, filterKey) in filterBucket" :key="filterKey">
               <input
@@ -83,6 +82,7 @@ watch([() => ({ ...queryFilters }), price], (...args) => debouncedWatch(...args)
               <label class="capitalize" :for="getId(title, filterKey)">{{  cleanFilter(filterKey)  }} ({{ value }})</label>
             </div>
           </div>
+          </div>
         </div>
       </div>
     </div>
@@ -90,7 +90,6 @@ watch([() => ({ ...queryFilters }), price], (...args) => debouncedWatch(...args)
       <div class="mb-6">
         {{ productCountMessage }}
       </div>
-
       <div class="overflow-hidden sm:rounded-lg grid lg:grid-cols-3 md:grid-cols-2 gap-4">
         <Link
             v-for="product in products" :key="product.slug"

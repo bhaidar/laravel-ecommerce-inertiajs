@@ -42,14 +42,13 @@ class ShowCategory
                     $options['filter'] .= ' AND ' . $filters;
                 }
 
-                $options['facets'] = ['size', 'color'];
+                $options['filter'] .= ' AND price <= ' . $price;
 
-                //dd($options['filter']);
+                $options['facets'] = ['size', 'color'];
 
                 return $meilisearch->search($query, $options);
             },
-        )->where('price <=', $price)
-        ->raw(); // coming from meilisearch
+        )->raw();// coming from meilisearch
 
         // Load eloquent models
         $products = $category
