@@ -69,7 +69,7 @@ watch([() => ({ ...queryFilters }), price], (...args) => debouncedWatch(...args)
               <input type="range" min="0" :max="maxProductPrice" v-model="price">
             </div>
           </div>
-          <div v-if="hasProducts">
+          <div v-if="hasProducts" class="space-y-6">
             <div class="space-y-1" v-for="(filterBucket, title) in filters" :key="props">
             <div class="font-semibold capitalize">{{ title }}</div>
             <div class="flex items-center space-x-2" v-for="(value, filterKey) in filterBucket" :key="filterKey">
