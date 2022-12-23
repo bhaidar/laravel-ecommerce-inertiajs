@@ -9,6 +9,7 @@ const props = defineProps({
   category: Object,
   products: Object,
   filters: Object,
+  maxPrice: Object,
 });
 
 const categoryTitle = computed(() => props?.category?.data?.title);
@@ -18,8 +19,8 @@ const searchFilters = computed(() => props?.filters?.data);
 const productData = computed(() => props?.products?.data);
 
 const ancestorTitle = (category) => category?.title;
-const onFiltersChanged = (filters) => {
-  Inertia.get(route('categories.show',  props?.category.data), { filters }, {
+const onFiltersChanged = ({ filters, price }) => {
+  Inertia.get(route('categories.show',  props?.category.data), { filters, price }, {
     replace: true,
     preserveState: true
   });
@@ -46,6 +47,7 @@ const onFiltersChanged = (filters) => {
         :category="categoryData"
         :products="productData"
         :filters="searchFilters"
+        :maxPrice="maxPrice"
         @filters-change="onFiltersChanged"
     />
   </AppLayout>

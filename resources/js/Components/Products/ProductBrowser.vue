@@ -11,11 +11,12 @@ const props = defineProps({
   category: Object,
   products: Object,
   filters: Object,
+  maxPrice: Object,
 });
 
 // Refs
 const queryFilters = reactive(Object.fromEntries(Object.keys(props?.filters).map((e) => [e, []])));
-const maxPrice = ref(Math.max(...props?.products.map(o => o.price.amount)));
+const price = ref(props?.maxPrice?.amount);
 
 
 // Computed
@@ -26,6 +27,8 @@ const productCountMessage = computed(() => {
   const productCount = products?.value.length;
   return `Found ${ productCount } product${ productCount > 1 ? 's' : ''} matching your filters`;
 });
+const maxProductPrice = computed(() => props.maxPrice?.amount);
+const maxProductPriceFormatted = computed(() => props.maxPrice?.formatted);
 
 // Functions
 const formattedPrice = (product) => product?.price?.formatted;
@@ -35,11 +38,14 @@ const cleanFilter = (filter) => filter?.replace(/[\[\]]/g, '');
 const getId = (titleKey, filterKey) => `${titleKey}_${filterKey}`;
 
 // Watch
-const debouncedWatch = debounce((filters) => {
-  emit('filtersChange', filters);
+const debouncedWatch = debounce((args) => {
+  emit('filtersChange', {
+    filters: args[0],
+    price: args[1],
+  });
 }, 200);
 
-//watch(() => ({ ...queryFilters }), (...args) => debouncedWatch(...args), { deep: true });
+watch([() => ({ ...queryFilters }), price], (...args) => debouncedWatch(...args), { deep: true });
 </script>
 
 <template>
@@ -57,11 +63,11 @@ const debouncedWatch = debounce((filters) => {
         </div>
 
         <div class="space-y-6">
-          {{ queryFilters }}
+          {{ price }}
           <div class="space-y-1">
-            <div class="font-semibold">Max price ($0)</div>
+            <div class="font-semibold">Max price ({{ maxProductPriceFormatted }})</div>
             <div class="flex items-center space-x-2">
-              <input type="range" min="0" :max="maxPrice" v-model="queryFilters.price">
+              <input type="range" min="0" :max="maxProductPrice" v-model="price">
             </div>
           </div>
 

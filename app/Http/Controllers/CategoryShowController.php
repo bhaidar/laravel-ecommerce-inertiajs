@@ -7,11 +7,9 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\FilterResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
-use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
-use stdClass;
 
 class CategoryShowController extends Controller
 {
@@ -27,7 +25,7 @@ class CategoryShowController extends Controller
             'category' => new CategoryResource($search['category']),
             'products' => ProductResource::collection($search['products']),
             'filters' => new FilterResource($search['filters']),
-            'query' => collect($search['filters'])->keys()->mapWithKeys(fn ($key) => [$key => []])->toArray(),
+            'maxPrice' => $search['maxPrice'],
         ]);
     }
 }
