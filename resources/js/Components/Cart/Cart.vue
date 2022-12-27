@@ -26,7 +26,7 @@ const subTotal = computed(() => props.cart?.data?.subTotal);
                 {{ subTotal }}
             </h1>
           </div>
-          <LinkButton href="#">Checkout</LinkButton>
+          <LinkButton :href="route('cart.checkout')">Checkout</LinkButton>
         </div>
       </div>
     </div>
