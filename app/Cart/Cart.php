@@ -109,6 +109,4 @@ class Cart implements CartInterface
     {
         return $this->instance()->variations->find($variation->id);
     }
-
-
 }
