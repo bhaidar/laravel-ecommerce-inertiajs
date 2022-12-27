@@ -6,6 +6,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import GlobalSearch from "@/Components/GlobalSearch.vue";
 
 const username = computed(() => usePage().props.value?.auth?.user?.name);
 const email = computed(() => usePage().props.value?.auth?.user?.email);
@@ -20,7 +21,7 @@ const showingNavigationDropdown = ref(false);
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
-        <div class="flex">
+        <div class="flex flex-grow">
           <!-- Logo -->
           <div class="shrink-0 flex items-center">
             <Link :href="route('home')">
@@ -31,11 +32,13 @@ const showingNavigationDropdown = ref(false);
 
           <!-- Navigation Links -->
           <div
-              class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+              class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex flex-grow">
             <NavLink :active="route().current('home')"
                      :href="route('home')">
               Categories
             </NavLink>
+
+            <GlobalSearch />
           </div>
         </div>
 

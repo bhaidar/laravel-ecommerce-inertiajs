@@ -16,6 +16,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/search', SearchController::class)->name('search');
+
 Route::get('/products/{product:slug}', ProductShowController::class)->name('products.show');
 Route::get('/categories/{category:slug}', CategoryShowController::class)->name('categories.show');
 
