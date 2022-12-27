@@ -42,7 +42,11 @@ class ShowCategory
                     $options['filter'] .= ' AND ' . $filters;
                 }
 
-                $options['filter'] .= ' AND price <= ' . $price;
+                if ($price) // some categories might not have products
+                {
+                    $options['filter'] .= ' AND price <= ' . $price;
+                }
+
 
                 $options['facets'] = ['size', 'color'];
 

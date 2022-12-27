@@ -62,27 +62,25 @@ watch([() => ({ ...queryFilters }), price], (...args) => debouncedWatch(...args)
             </li>
           </ul>
         </div>
-        <div class="space-y-6">
+        <div class="space-y-6" v-if="hasProducts">
           <div class="space-y-1">
             <div class="font-semibold">Max price ({{ maxProductPriceFormatted }})</div>
             <div class="flex items-center space-x-2">
               <input type="range" min="0" :max="maxProductPrice" v-model="price">
             </div>
           </div>
-          <template v-if="hasProducts">
-            <div class="space-y-1" v-for="(filterBucket, title) in filters" :key="props">
-            <div class="font-semibold capitalize">{{ title }}</div>
-            <div class="flex items-center space-x-2" v-for="(value, filterKey) in filterBucket" :key="filterKey">
-              <input
-                  type="checkbox"
-                  :id="getId(title, filterKey)"
-                  :value="cleanFilter(filterKey)"
-                  v-model="queryFilters[title]"
-              >
+          <div class="space-y-1" v-for="(filterBucket, title) in filters" :key="props">
+          <div class="font-semibold capitalize">{{ title }}</div>
+          <div class="flex items-center space-x-2" v-for="(value, filterKey) in filterBucket" :key="filterKey">
+            <input
+                type="checkbox"
+                :id="getId(title, filterKey)"
+                :value="cleanFilter(filterKey)"
+                v-model="queryFilters[title]"
+            >
               <label class="capitalize" :for="getId(title, filterKey)">{{  cleanFilter(filterKey)  }} ({{ value }})</label>
             </div>
           </div>
-          </template>
         </div>
       </div>
     </div>
