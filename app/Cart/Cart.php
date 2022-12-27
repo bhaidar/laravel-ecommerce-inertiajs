@@ -7,7 +7,6 @@ use App\Cart\Contracts\CartInterface;
 use App\Http\Resources\CartResource;
 use App\Models\User;
 use App\Models\Variation;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Session\SessionManager;
 use App\Models\Cart as ModelsCart;
 

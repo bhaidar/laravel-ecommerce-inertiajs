@@ -1,9 +1,23 @@
 <script setup>
-
+import { computed } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+
+const props = defineProps({
+  cart: Object,
+});
+
+//const subTotal = computed(() => props.cart?.data?.subTotal);
+const variations = computed(() => props.cart?.data?.items);
+
+const productSlug = (product) => product?.slug;
+const variationAncestors = (product) => product?.ancestorsAndSelf;
+const variationImage = (product) => product?.medias?.[0]?.thumbnails?.[0] ?? product?.medias?.[0]?.originalImage;
+const variationPrice = (product) => product?.price?.formatted;
+const variationTitle = (product) => product?.title;
+const variationQuantity = (product) => product?.quantity;
 </script>
 
 <template>
@@ -90,27 +104,29 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                 </div>
               </div>
             </div>
-
             <div class="p-6 bg-white border-b border-gray-200 col-span-3 self-start space-y-4">
-              <div>
+              <div v-for="product in variations" :key="productSlug(product)">
                 <div class="border-b py-3 flex items-start">
                   <div class="w-16 mr-4">
-                    <img src="" class="w-16">
+                    <img :src="variationImage(product)" class="w-16">
                   </div>
 
                   <div class="space-y-2">
                     <div>
                       <div class="font-semibold">
-                        Formatted price
+                        {{ variationPrice(product) }}
                       </div>
                       <div class="space-y-1">
-                        <div>Product title</div>
+                        <div>{{ variationTitle(product) }}</div>
 
                         <div class="flex items-center text-sm">
                           <div class="mr-1 font-semibold">
-                            Quantity: 0 <span class="text-gray-400 mx-1">/</span>
+                            Quantity: {{ variationQuantity(product) }} <span class="text-gray-400 mx-1">/</span>
                           </div>
-                          Ancestor <span class="text-gray-400 mx-1">/</span>
+                          <span v-for="(variation, idx) in variationAncestors(product)" :key="variation.id">
+                            {{ variationTitle(variation) }}
+                            <span v-if="idx !== variationAncestors(product)?.length - 1" class="text-gray-400 mx-1">/</span>
+                          </span>
                         </div>
                       </div>
                     </div>

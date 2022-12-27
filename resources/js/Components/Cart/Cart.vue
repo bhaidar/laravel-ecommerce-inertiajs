@@ -8,7 +8,6 @@ const props = defineProps({
 });
 const isCartEmpty = computed(() => props.cart?.data?.count <= 0);
 const variations = computed(() => props.cart?.data?.items);
-const total = computed(() => props.cart?.data?.total);
 const subTotal = computed(() => props.cart?.data?.subTotal);
 </script>
 
