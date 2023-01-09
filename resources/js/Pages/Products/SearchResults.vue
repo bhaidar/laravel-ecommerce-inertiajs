@@ -29,7 +29,8 @@ const productTitle = (product) => product?.title;
       <div class="grid grid-cols-2 column-gap-6" v-if="searchHasProducts">
         <Link
             v-for="product in products.data" :key="productSlug(product)"
-            :href="route('products.show', product)" class="border-b py-3 space-y-2 flex items-center">
+            :href="route('products.show', product)"
+            class="border-b py-3 mr-4 space-y-2 flex items-center">
           <div>
             <div class="font-semibold text-lg">{{  formattedPrice(product) }}</div>
             <div>{{ productTitle(product) }}</div>

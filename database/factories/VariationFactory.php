@@ -14,10 +14,16 @@ class VariationFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'product_id' => '',
+            'title' => '',
+            'price' => $this->faker->numberBetween(10000, 40000),
+            'type' => '',
+            'sku' => '',
+            'parent_id' => '',
+            'order' => 0,
         ];
     }
 }

@@ -14,10 +14,11 @@ class StockFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'variation_id' => '',
+            'amount' => $this->faker->numberBetween(0, 10),
         ];
     }
 }

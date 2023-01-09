@@ -47,7 +47,6 @@ class ShowCategory
                     $options['filter'] .= ' AND price <= ' . $price;
                 }
 
-
                 $options['facets'] = ['size', 'color'];
 
                 return $meilisearch->search($query, $options);

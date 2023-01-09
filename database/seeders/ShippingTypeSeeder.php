@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ShippingType;
 use Database\Factories\ShippingTypeFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,6 +16,6 @@ class ShippingTypeSeeder extends Seeder
      */
     public function run()
     {
-        ShippingTypeFactory::factory(2)->create();
+        ShippingType::factory(2)->create();
     }
 }
