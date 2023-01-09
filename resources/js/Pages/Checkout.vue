@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
@@ -7,10 +7,11 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
   cart: Object,
+  shippingTypes: Object,
+  money: Object,
 });
 
-const subTotal = computed(() => props.cart?.data?.subTotal);
-const variations = computed(() => props.cart?.data?.items);
+const shippingTypeId = ref(props.shippingTypes?.data?.[0]?.id); // set it to the first element
 
 const productSlug = (product) => product?.slug;
 const variationAncestors = (product) => product?.ancestorsAndSelf;
@@ -18,6 +19,28 @@ const variationImage = (product) => product?.medias?.[0]?.thumbnails?.[0] ?? pro
 const variationPrice = (product) => product?.price?.formatted;
 const variationTitle = (product) => product?.title;
 const variationQuantity = (product) => product?.quantity;
+
+const subTotal = computed(() => props.cart?.data?.subTotal?.amount);
+const subTotalFormatted = computed(() => props.cart?.data?.subTotal?.formatted);
+
+const variations = computed(() => props.cart?.data?.items);
+
+const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => shippingType.id === shippingTypeId.value));
+const shippingSubtotalFormatted = computed(() => shippingTypePriceFormatted(shippingTypeSelected.value));
+const shippingSubtotal = computed(() => shippingTypePrice(shippingTypeSelected.value));
+
+const cartTotal = computed(() => Number(subTotal.value) + Number(shippingSubtotal.value));
+const cartTotalFormatted = computed(() => {
+  return Number(cartTotal.value/100)
+      .toLocaleString(props.money?.locale, {
+        style: 'currency',
+        currency: props.money?.currency,
+      });
+});
+
+const shippingTypePriceFormatted = (shippingType) => shippingType?.price?.formatted;
+const shippingTypePrice = (shippingType) => shippingType?.price?.amount;
+const shippingTypeValue = (shippingType) => shippingType?.id;
 </script>
 
 <template>
@@ -26,7 +49,9 @@ const variationQuantity = (product) => product?.quantity;
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Checkout</h2>
+        Checkout
+        {{ props.money }}
+      </h2>
     </template>
 
     <div class="py-12">
@@ -50,7 +75,7 @@ const variationQuantity = (product) => product?.quantity;
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                <select class="w-full">
+                <select class="w-full" v-model="shippingTypeId">
                   <option value="">Choose a pre-saved address</option>
                   <option value="">Pre-saved address</option>
                 </select>
@@ -90,8 +115,10 @@ const variationQuantity = (product) => product?.quantity;
                 <div class="font-semibold text-lg">Delivery</div>
 
                 <div class="space-y-1">
-                  <select class="w-full">
-                    <option>Shipping type ($0)</option>
+                  <select class="w-full" v-model="shippingTypeId">
+                    <option v-for="shippingType in shippingTypes.data" :value="shippingTypeValue(shippingType)">
+                      {{ shippingType.title }} ({{ shippingTypePriceFormatted(shippingType) }})
+                    </option>
                   </select>
                 </div>
               </div>
@@ -138,17 +165,17 @@ const variationQuantity = (product) => product?.quantity;
                 <div class="space-y-1">
                   <div class="space-y-1 flex items-center justify-between">
                     <div class="font-semibold">Subtotal</div>
-                    <h1 class="font-semibold">{{ subTotal }}</h1>
+                    <h1 class="font-semibold">{{ subTotalFormatted }}</h1>
                   </div>
 
                   <div class="space-y-1 flex items-center justify-between">
                     <div class="font-semibold">Shipping (Shipping type)</div>
-                    <h1 class="font-semibold">$0</h1>
+                    <h1 class="font-semibold">{{ shippingSubtotalFormatted }}</h1>
                   </div>
 
                   <div class="space-y-1 flex items-center justify-between">
                     <div class="font-semibold">Total</div>
-                    <h1 class="font-semibold">$0</h1>
+                    <h1 class="font-semibold">{{ cartTotalFormatted }}</h1>
                   </div>
                 </div>
 

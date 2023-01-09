@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Cart\Contracts\CartInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CartResource extends JsonResource
+class ShippingTypeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +14,10 @@ class CartResource extends JsonResource
      */
     public function toArray($request)
     {
-        $items = $this->items();
-
         return [
-            'items' => VariationResource::collection($items),
-            'count' => $items->count() ?? 0,
-            'subTotal' => $this->subTotal(),
+            'id' => $this->id,
+            'title' => $this->title,
+            'price' => $this->price,
         ];
     }
 }

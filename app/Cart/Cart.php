@@ -7,6 +7,7 @@ use App\Cart\Contracts\CartInterface;
 use App\Http\Resources\CartResource;
 use App\Models\User;
 use App\Models\Variation;
+use Cknow\Money\Money;
 use Illuminate\Session\SessionManager;
 use App\Models\Cart as ModelsCart;
 
@@ -69,15 +70,13 @@ class Cart implements CartInterface
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 
-    public function formattedSubTotal(): string
+    public function subTotal(): Money
     {
-        $subTotal = $this->instance()
+        return money($this->instance()
             ->variations
             ->reduce(function ($carry, $variation) {
                 return ($carry + ($variation->price->getAmount() * $variation->pivot->quantity));
-            }, 0);
-
-        return money($subTotal);
+            }, 0));
     }
 
     public function items()

@@ -49,6 +49,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'cart' => fn () => $this->cart->toResource(),
+            'money' => [
+                'locale' => config('money.locale'),
+                'currency' => config('money.defaultCurrency'),
+            ],
             'flash' => [
                 'notification' => fn () => $request->session()->get('notification')
             ],
