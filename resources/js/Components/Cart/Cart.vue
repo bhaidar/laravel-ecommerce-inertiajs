@@ -8,7 +8,7 @@ const props = defineProps({
 });
 const isCartEmpty = computed(() => props.cart?.data?.count <= 0);
 const variations = computed(() => props.cart?.data?.items);
-const subTotal = computed(() => props.cart?.data?.subTotal);
+const subTotalFormatted = computed(() => props.cart?.data?.subTotal?.formatted);
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const subTotal = computed(() => props.cart?.data?.subTotal);
           <div class="space-y-1 flex items-center justify-between">
             <div class="font-semibold">Subtotal</div>
             <h1 class="font-semibold text-xl">
-                {{ subTotal }}
+                {{ subTotalFormatted }}
             </h1>
           </div>
           <LinkButton :href="route('cart.checkout')">Checkout</LinkButton>

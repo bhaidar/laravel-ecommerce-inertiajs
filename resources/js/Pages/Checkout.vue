@@ -50,7 +50,6 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Checkout
-        {{ props.money }}
       </h2>
     </template>
 
