@@ -4,6 +4,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { usePage } from "@inertiajs/inertia-vue3";
 
 const props = defineProps({
   cart: Object,
@@ -19,6 +20,8 @@ const variationImage = (product) => product?.medias?.[0]?.thumbnails?.[0] ?? pro
 const variationPrice = (product) => product?.price?.formatted;
 const variationTitle = (product) => product?.title;
 const variationQuantity = (product) => product?.quantity;
+
+const isGuest = computed(() => !usePage().props.value?.auth?.user);
 
 const subTotal = computed(() => props.cart?.data?.subTotal?.amount);
 const subTotalFormatted = computed(() => props.cart?.data?.subTotal?.formatted);
@@ -58,7 +61,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
         <form>
           <div class="overflow-hidden sm:rounded-lg grid grid-cols-6 grid-flow-col gap-4">
             <div class="p-6 bg-white border-b border-gray-200 col-span-3 self-start space-y-6">
-              <div class="space-y-3">
+              <div v-if="isGuest" class="space-y-3">
                 <div class="font-semibold text-lg">Account details</div>
 
                 <div>
