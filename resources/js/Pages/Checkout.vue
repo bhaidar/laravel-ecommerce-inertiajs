@@ -4,13 +4,21 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage, useForm } from "@inertiajs/inertia-vue3";
 
 const props = defineProps({
   cart: Object,
   shippingTypes: Object,
   money: Object,
 });
+
+const checkoutForm = useForm({
+  email: null,
+});
+
+const checkout = () => {
+
+};
 
 const shippingTypeId = ref(props.shippingTypes?.data?.[0]?.id); // set it to the first element
 
@@ -58,7 +66,8 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <form>
+        {{ checkoutForm }}
+        <form @submit.prevent="checkout">
           <div class="overflow-hidden sm:rounded-lg grid grid-cols-6 grid-flow-col gap-4">
             <div class="p-6 bg-white border-b border-gray-200 col-span-3 self-start space-y-6">
               <div v-if="isGuest" class="space-y-3">
@@ -66,7 +75,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 
                 <div>
                   <label for="email">Email</label>
-                  <text-input id="email" class="block mt-1 w-full" type="text" name="email" />
+                  <text-input id="email" class="block mt-1 w-full" type="text" name="email" v-model="checkoutForm.email" />
 
                   <div class="mt-2 font-semibold text-red-500">
                     An error
