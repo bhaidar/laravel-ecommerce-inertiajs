@@ -9,7 +9,7 @@ const props = defineProps({
   cart: Object,
 });
 
-//const subTotal = computed(() => props.cart?.data?.subTotal);
+const subTotal = computed(() => props.cart?.data?.subTotal);
 const variations = computed(() => props.cart?.data?.items);
 
 const productSlug = (product) => product?.slug;
@@ -108,7 +108,7 @@ const variationQuantity = (product) => product?.quantity;
               <div v-for="product in variations" :key="productSlug(product)">
                 <div class="border-b py-3 flex items-start">
                   <div class="w-16 mr-4">
-                    <img :src="variationImage(product)" class="w-16">
+                    <img :src="variationImage(product)" class="w-16" alt="">
                   </div>
 
                   <div class="space-y-2">
@@ -138,7 +138,7 @@ const variationQuantity = (product) => product?.quantity;
                 <div class="space-y-1">
                   <div class="space-y-1 flex items-center justify-between">
                     <div class="font-semibold">Subtotal</div>
-                    <h1 class="font-semibold">$0</h1>
+                    <h1 class="font-semibold">{{ subTotal }}</h1>
                   </div>
 
                   <div class="space-y-1 flex items-center justify-between">
