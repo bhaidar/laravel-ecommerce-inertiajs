@@ -16,6 +16,11 @@ const props = defineProps({
 
 const checkoutForm = useForm({
   email: null,
+  shipping: {
+    address: null,
+    city: null,
+    postCode: null,
+  },
 });
 
 const checkout = () => {
@@ -81,7 +86,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                 <div class="font-semibold text-lg">Account details</div>
 
                 <div>
-                  <InputLabel for="email" value="Email" class="sr-only" />
+                  <InputLabel for="email" value="Email" />
                   <TextInput id="email" type="text" class="block w-full h-9 text-sm"
                              placeholder="e.g. bhaidar@gmail.com"
                              v-model="checkoutForm.email"
@@ -101,30 +106,30 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 
                 <div class="space-y-3">
                   <div>
-                    <label for="address">Address</label>
-                    <text-input id="address" class="block mt-1 w-full" type="text" name="address" />
-
-                    <div class="mt-2 font-semibold text-red-500">
-                      An error
-                    </div>
+                    <InputLabel for="address" value="Address" />
+                    <TextInput id="address" type="text" class="block w-full text-sm"
+                               v-model="checkoutForm.shipping.address"
+                               :class="{ 'border-red-500': checkoutForm.errors['shipping.address'] }"
+                    />
+                    <InputError class="mt-2" :message="checkoutForm.errors['shipping.address']" />
                   </div>
 
                   <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-1">
-                      <label for="address">City</label>
-                      <text-input id="address" class="block mt-1 w-full" type="text" name="address" />
-
-                      <div class="mt-2 font-semibold text-red-500">
-                        An error
-                      </div>
+                      <InputLabel for="city" value="City" />
+                      <TextInput id="city" type="text" class="block w-full text-sm"
+                                 v-model="checkoutForm.shipping.city"
+                                 :class="{ 'border-red-500': checkoutForm.errors['shipping.city'] }"
+                      />
+                      <InputError class="mt-2" :message="checkoutForm.errors['shipping.city']" />
                     </div>
                     <div class="col-span-1">
-                      <label for="address">Postal code</label>
-                      <text-input id="address" class="block mt-1 w-full" type="text" name="address" />
-
-                      <div class="mt-2 font-semibold text-red-500">
-                        An error
-                      </div>
+                      <InputLabel for="postalCode" value="Postal Code" />
+                      <TextInput id="postalCode" type="text" class="block w-full text-sm"
+                                 v-model="checkoutForm.shipping.postCode"
+                                 :class="{ 'border-red-500': checkoutForm.errors['shipping.postCode'] }"
+                      />
+                      <InputError class="mt-2" :message="checkoutForm.errors['shipping.postCode']" />
                     </div>
                   </div>
                 </div>

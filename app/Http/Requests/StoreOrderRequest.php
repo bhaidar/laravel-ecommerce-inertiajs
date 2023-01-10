@@ -25,7 +25,21 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'shipping.address' => ['required', 'max:255'] ,
+            'shipping.city' => ['required', 'max:255'],
+            'shipping.postCode' => ['required', 'max:255'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'shipping.address.required' => 'The address is required.',
+            'shipping.address.max' => 'The address must not be greater than 255 characters.',
+            'shipping.city.required' => 'The city is required.',
+            'shipping.city.max' => 'The city must not be greater than 255 characters.',
+            'shipping.postCode.required' => 'The postcode is required.',
+            'shipping.postCode.max' => 'The postcode must not be greater than 255 characters.',
         ];
     }
 
@@ -33,7 +47,7 @@ class StoreOrderRequest extends FormRequest
     {
         $validator->sometimes(
             attribute: 'email',
-            rules: 'required|email|max:255|unique:users,email',
+            rules: ['required', 'email', 'max:255', 'unique:users,email'],
             callback: fn ($input) => auth()->guest(),
         );
     }
