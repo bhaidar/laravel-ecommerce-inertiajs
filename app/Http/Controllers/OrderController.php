@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
+use App\Models\ShippingAddress;
 
 class OrderController extends Controller
 {
@@ -13,6 +14,9 @@ class OrderController extends Controller
      */
     public function __invoke(StoreOrderRequest $request)
     {
-        dd($request);
+        // Create shipping address
+        ShippingAddress::firstOrCreate($request->shipping);
+
+        dd($request->all());
     }
 }

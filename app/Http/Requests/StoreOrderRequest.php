@@ -53,4 +53,9 @@ class StoreOrderRequest extends FormRequest
             callback: fn ($input) => auth()->guest(),
         );
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['shipping' => [...$this->shipping, 'postcode' =>$this->shipping['postCode']]]);
+    }
 }

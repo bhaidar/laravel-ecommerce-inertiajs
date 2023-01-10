@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import { usePage, useForm } from "@inertiajs/inertia-vue3";
+import { Head, usePage, useForm } from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -21,7 +21,7 @@ const checkoutForm = useForm({
     city: null,
     postCode: null,
   },
-  shippingType: null,
+  shippingType: props.shippingTypes?.data?.[0]?.id, // set it to the first element,
 });
 
 const checkout = () => {
@@ -32,8 +32,6 @@ const checkout = () => {
     }
   })
 };
-
-const shippingTypeId = ref(props.shippingTypes?.data?.[0]?.id); // set it to the first element
 
 const productSlug = (product) => product?.slug;
 const variationAncestors = (product) => product?.ancestorsAndSelf;
@@ -49,7 +47,7 @@ const subTotalFormatted = computed(() => props.cart?.data?.subTotal?.formatted);
 
 const variations = computed(() => props.cart?.data?.items);
 
-const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => shippingType.id === shippingTypeId.value));
+const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => shippingType.id === checkoutForm?.shippingType?.value));
 const shippingSubtotalFormatted = computed(() => shippingTypePriceFormatted(shippingTypeSelected.value));
 const shippingSubtotal = computed(() => shippingTypePrice(shippingTypeSelected.value));
 
@@ -68,7 +66,9 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 </script>
 
 <template>
-  <Head title="Checkout" />
+  <Head >
+    <title>Checkout</title>
+  </Head>
 
   <app-layout>
     <template #header>
