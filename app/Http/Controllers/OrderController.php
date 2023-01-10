@@ -15,7 +15,12 @@ class OrderController extends Controller
     public function __invoke(StoreOrderRequest $request)
     {
         // Create shipping address
-        ShippingAddress::firstOrCreate($request->shipping);
+        (ShippingAddress::query()
+            ->whereBelongsTo(auth()->user()) // only address that belong to me, no stealing for others' address
+            ->firstOrCreate($request->shipping))
+            ?->user() // associate user to shipping address if user logged-in
+            ->associate(auth()->user())
+            ->save();
 
         dd($request->all());
     }
