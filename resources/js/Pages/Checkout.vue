@@ -1,12 +1,12 @@
 <script setup>
 import { computed, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import TextInput from "@/Components/TextInput.vue";
-import Select from "@/Components/Select.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { usePage, useForm } from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
+import Select from "@/Components/Select.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
   cart: Object,
@@ -21,6 +21,7 @@ const checkoutForm = useForm({
     city: null,
     postCode: null,
   },
+  shippingType: null,
 });
 
 const checkout = () => {
@@ -99,7 +100,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                <select class="w-full" v-model="shippingTypeId">
+                <select class="w-full">
                   <option value="">Choose a pre-saved address</option>
                   <option value="">Pre-saved address</option>
                 </select>
@@ -139,11 +140,11 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                 <div class="font-semibold text-lg">Delivery</div>
 
                 <div class="space-y-1">
-                  <select class="w-full" v-model="shippingTypeId">
+                  <Select class="w-full" v-model="checkoutForm.shippingType">
                     <option v-for="shippingType in shippingTypes.data" :value="shippingTypeValue(shippingType)">
                       {{ shippingType.title }} ({{ shippingTypePriceFormatted(shippingType) }})
                     </option>
-                  </select>
+                  </Select>
                 </div>
               </div>
 

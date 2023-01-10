@@ -28,6 +28,7 @@ class StoreOrderRequest extends FormRequest
             'shipping.address' => ['required', 'max:255'] ,
             'shipping.city' => ['required', 'max:255'],
             'shipping.postCode' => ['required', 'max:255'],
+            'shippingType' => ['required'],
         ];
     }
 
@@ -40,6 +41,7 @@ class StoreOrderRequest extends FormRequest
             'shipping.city.max' => 'The shipping city must not be greater than 255 characters.',
             'shipping.postCode.required' => 'The shipping postcode is required.',
             'shipping.postCode.max' => 'The shipping postcode must not be greater than 255 characters.',
+            'shippingTYpe.required' => 'The shipping type is required.',
         ];
     }
 
