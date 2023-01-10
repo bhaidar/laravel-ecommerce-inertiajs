@@ -34,12 +34,12 @@ class StoreOrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'shipping.address.required' => 'The address is required.',
-            'shipping.address.max' => 'The address must not be greater than 255 characters.',
-            'shipping.city.required' => 'The city is required.',
-            'shipping.city.max' => 'The city must not be greater than 255 characters.',
-            'shipping.postCode.required' => 'The postcode is required.',
-            'shipping.postCode.max' => 'The postcode must not be greater than 255 characters.',
+            'shipping.address.required' => 'The shipping address is required.',
+            'shipping.address.max' => 'The shipping address must not be greater than 255 characters.',
+            'shipping.city.required' => 'The shipping city is required.',
+            'shipping.city.max' => 'The shipping city must not be greater than 255 characters.',
+            'shipping.postCode.required' => 'The shipping postcode is required.',
+            'shipping.postCode.max' => 'The shipping postcode must not be greater than 255 characters.',
         ];
     }
 
