@@ -5,6 +5,8 @@ import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { usePage, useForm } from "@inertiajs/inertia-vue3";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 
 const props = defineProps({
   cart: Object,
@@ -17,7 +19,12 @@ const checkoutForm = useForm({
 });
 
 const checkout = () => {
-
+  checkoutForm.post(route('orders.store'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      checkoutForm.reset();
+    }
+  })
 };
 
 const shippingTypeId = ref(props.shippingTypes?.data?.[0]?.id); // set it to the first element
@@ -74,12 +81,13 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                 <div class="font-semibold text-lg">Account details</div>
 
                 <div>
-                  <label for="email">Email</label>
-                  <text-input id="email" class="block mt-1 w-full" type="text" name="email" v-model="checkoutForm.email" />
-
-                  <div class="mt-2 font-semibold text-red-500">
-                    An error
-                  </div>
+                  <InputLabel for="email" value="Email" class="sr-only" />
+                  <TextInput id="email" type="text" class="block w-full h-9 text-sm"
+                             placeholder="e.g. bhaidar@gmail.com"
+                             v-model="checkoutForm.email"
+                             :class="{ 'border-red-500': checkoutForm.errors.email }"
+                  />
+                  <InputError class="mt-2" :message="checkoutForm.errors.email" />
                 </div>
               </div>
 
@@ -190,7 +198,9 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                   </div>
                 </div>
 
-                <primary-button type="submit">Confirm order and pay</primary-button>
+                <PrimaryButton type="submit">
+                  Confirm order and pay
+                </PrimaryButton>
               </div>
             </div>
           </div>
