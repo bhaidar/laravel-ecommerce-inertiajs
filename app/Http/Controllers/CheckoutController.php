@@ -15,7 +15,7 @@ class CheckoutController extends Controller
     {
         return Inertia::render('Checkout',[
             'shippingTypes' => ShippingTypeResource::collection(ShippingType::orderBy('price', 'asc')->get()),
-            'shippingAddresses' => ShippingAddressResource::collection(auth()->user()?->shippingAddresses),
+            'shippingAddresses' => ShippingAddressResource::collection(auth()->user()->shippingAddresses ?? []),
         ]);
     }
 }

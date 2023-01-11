@@ -115,7 +115,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                <Select class="w-full" v-model="checkoutForm.shippingAddress">
+                <Select class="w-full" v-model="checkoutForm.shippingAddress" v-if="!isGuest">
                   <option value="">Choose a pre-saved address</option>
                   <option v-for="shippingAddress in shippingAddresses.data" :key="shippingAddress.id" :value="shippingAddress.id">{{ formattedAddress(shippingAddress) }}</option>
                 </Select>
