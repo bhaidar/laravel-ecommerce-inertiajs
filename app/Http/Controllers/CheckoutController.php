@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ShippingAddressResource;
 use App\Http\Resources\ShippingTypeResource;
 use App\Models\ShippingType;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ class CheckoutController extends Controller
     {
         return Inertia::render('Checkout',[
             'shippingTypes' => ShippingTypeResource::collection(ShippingType::orderBy('price', 'asc')->get()),
+            'shippingAddresses' => ShippingAddressResource::collection(auth()->user()?->shippingAddresses),
         ]);
     }
 }

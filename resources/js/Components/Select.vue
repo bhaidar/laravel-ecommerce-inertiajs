@@ -10,7 +10,7 @@ defineProps({
 
 <template>
   <select
-        class="block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm h-9 leading-none text-sm"
         :value="modelValue"
         @change="$emit('update:modelValue', $event.target.value)"
         v-bind="$attrs"

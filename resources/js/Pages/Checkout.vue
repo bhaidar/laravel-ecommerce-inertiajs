@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, toRaw, watch } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, usePage, useForm } from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
@@ -11,17 +11,29 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 const props = defineProps({
   cart: Object,
   shippingTypes: Object,
+  shippingAddresses: Object,
   money: Object,
 });
 
 const checkoutForm = useForm({
   email: null,
+  shippingAddress: null,
   shipping: {
     address: null,
     city: null,
     postCode: null,
   },
   shippingType: props.shippingTypes?.data?.[0]?.id, // set it to the first element,
+});
+
+watch(() => checkoutForm.shippingAddress, function (shippingAddressId) {
+  const shippingAddress = toRaw(props.shippingAddresses.data).find(
+      (address) => +address.id === +shippingAddressId
+  );
+
+  if (shippingAddress) {
+    checkoutForm.shipping = { ...shippingAddress };
+  }
 });
 
 const checkout = () => {
@@ -60,6 +72,10 @@ const cartTotalFormatted = computed(() => {
       });
 });
 
+const formattedAddress = (shippingAddress) => {
+  return `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postCode}`;
+};
+
 const shippingTypePriceFormatted = (shippingType) => shippingType?.price?.formatted;
 const shippingTypePrice = (shippingType) => shippingType?.price?.amount;
 const shippingTypeValue = (shippingType) => shippingType?.id;
@@ -79,7 +95,6 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        {{ checkoutForm }}
         <form @submit.prevent="checkout">
           <div class="overflow-hidden sm:rounded-lg grid grid-cols-6 grid-flow-col gap-4">
             <div class="p-6 bg-white border-b border-gray-200 col-span-3 self-start space-y-6">
@@ -88,7 +103,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 
                 <div>
                   <InputLabel for="email" value="Email" />
-                  <TextInput id="email" type="text" class="block w-full h-9 text-sm"
+                  <TextInput id="email" type="text" class="block w-full h-9 text-sm mt-2"
                              placeholder="e.g. bhaidar@gmail.com"
                              v-model="checkoutForm.email"
                              :class="{ 'border-red-500': checkoutForm.errors.email }"
@@ -100,15 +115,15 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                <select class="w-full">
+                <Select class="w-full" v-model="checkoutForm.shippingAddress">
                   <option value="">Choose a pre-saved address</option>
-                  <option value="">Pre-saved address</option>
-                </select>
+                  <option v-for="shippingAddress in shippingAddresses.data" :key="shippingAddress.id" :value="shippingAddress.id">{{ formattedAddress(shippingAddress) }}</option>
+                </Select>
 
                 <div class="space-y-3">
                   <div>
                     <InputLabel for="address" value="Address" />
-                    <TextInput id="address" type="text" class="block w-full text-sm"
+                    <TextInput id="address" type="text" class="block w-full text-sm mt-2"
                                v-model="checkoutForm.shipping.address"
                                :class="{ 'border-red-500': checkoutForm.errors['shipping.address'] }"
                     />
@@ -118,7 +133,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                   <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-1">
                       <InputLabel for="city" value="City" />
-                      <TextInput id="city" type="text" class="block w-full text-sm"
+                      <TextInput id="city" type="text" class="block w-full text-sm mt-2"
                                  v-model="checkoutForm.shipping.city"
                                  :class="{ 'border-red-500': checkoutForm.errors['shipping.city'] }"
                       />
@@ -126,7 +141,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                     </div>
                     <div class="col-span-1">
                       <InputLabel for="postalCode" value="Postal Code" />
-                      <TextInput id="postalCode" type="text" class="block w-full text-sm"
+                      <TextInput id="postalCode" type="text" class="block w-full text-sm mt-2"
                                  v-model="checkoutForm.shipping.postCode"
                                  :class="{ 'border-red-500': checkoutForm.errors['shipping.postCode'] }"
                       />
@@ -136,7 +151,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
                 </div>
               </div>
 
-              <div class="space-y-3">
+              <div class="space-y-2">
                 <div class="font-semibold text-lg">Delivery</div>
 
                 <div class="space-y-1">
