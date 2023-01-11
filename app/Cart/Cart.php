@@ -84,6 +84,11 @@ class Cart implements CartInterface
         return $this->instance()->variations;
     }
 
+    public function isEmpty(): bool
+    {
+        return $this->items()->count() === 0;
+    }
+
     public function remove(Variation $variation)
     {
         $this->instance()->variations()->detach($variation);
