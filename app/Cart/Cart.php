@@ -4,10 +4,12 @@ namespace App\Cart;
 
 use App\Actions\GetCart;
 use App\Cart\Contracts\CartInterface;
+use App\Cart\Exceptions\QuantityNoLongerAvailableException;
 use App\Http\Resources\CartResource;
 use App\Models\User;
 use App\Models\Variation;
 use Cknow\Money\Money;
+use Exception;
 use Illuminate\Session\SessionManager;
 use App\Models\Cart as ModelsCart;
 
@@ -97,6 +99,20 @@ class Cart implements CartInterface
     public function toResource(): CartResource
     {
         return new CartResource($this);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function verifyAvailableQuantities()
+    {
+        $this->items()->each(
+            function ($variation) {
+           if ($variation->pivot->quantity > $variation->stockFigures->stockCount)
+           {
+                throw new QuantityNoLongerAvailableException('Stock reduced!');
+           }
+        });
     }
 
     protected function instance(): ModelsCart
