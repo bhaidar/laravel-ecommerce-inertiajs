@@ -16,7 +16,7 @@ class CartController extends Controller
         }
         catch (QuantityNoLongerAvailableException $exception)
         {
-
+            $cart->syncAvailableQuantities();
         }
 
         return Inertia::render('Cart/Index');

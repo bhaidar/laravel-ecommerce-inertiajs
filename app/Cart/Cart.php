@@ -16,18 +16,13 @@ use App\Models\Cart as ModelsCart;
 class Cart implements CartInterface
 {
     // Caching in-class cart instance
-    protected ModelsCart $instance;
+    protected ?ModelsCart $instance;
 
     public function __construct(
         protected SessionManager $session,
         protected GetCart $getCart,
     )
     { }
-
-    public function exists()
-    {
-        return $this->session->has(config('cart.session.key'));
-    }
 
     public function add($variation, int $quantity = 1)
     {
@@ -72,6 +67,26 @@ class Cart implements CartInterface
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 
+    public function exists()
+    {
+        return $this->session->has(config('cart.session.key'));
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->instance()->variations->count() === 0;
+    }
+
+    public function items()
+    {
+        return $this->instance()->variations;
+    }
+
+    public function remove(Variation $variation)
+    {
+        $this->instance()->variations()->detach($variation);
+    }
+
     public function subTotal(): Money
     {
         return money($this->instance()
@@ -81,19 +96,32 @@ class Cart implements CartInterface
             }, 0));
     }
 
-    public function items()
+    /**
+     * We should sync the quantities the user has selected
+     * with whatever is available in stock
+     *
+     * @return void
+     */
+    public function syncAvailableQuantities()
     {
-        return $this->instance()->variations;
-    }
+        $syncedQuantities = $this->instance->variations->mapWithKeys(function ($variation) {
+            $quantity = ($variation->pivot->quantity > $variation->stockFigures->stockCount)
+                ? $variation->stockFigures->stockCount
+                : $variation->pivot->quantity;
 
-    public function isEmpty(): bool
-    {
-        return $this->items()->count() === 0;
-    }
+            return [
+                $variation->id => [
+                    'quantity' => $quantity,
+                ],
+            ];
+        })
+        ->reject(function ($syncedQuantity) {
+            return $syncedQuantity['quantity'] === 0;
+        });
 
-    public function remove(Variation $variation)
-    {
-        $this->instance()->variations()->detach($variation);
+        $this->instance()->variations()->sync($syncedQuantities);
+
+        $this->clearInstanceCache();
     }
 
     public function toResource(): CartResource
@@ -102,17 +130,26 @@ class Cart implements CartInterface
     }
 
     /**
+     * By the time the user is checking out, another user
+     * might have completed their transactions and quantities
+     * have changed
+     *
      * @throws Exception
      */
     public function verifyAvailableQuantities()
     {
-        $this->items()->each(
+        $this->instance()->variations->each(
             function ($variation) {
            if ($variation->pivot->quantity > $variation->stockFigures->stockCount)
            {
                 throw new QuantityNoLongerAvailableException('Stock reduced!');
            }
         });
+    }
+
+    protected function clearInstanceCache()
+    {
+        $this->instance = null;
     }
 
     protected function instance(): ModelsCart
