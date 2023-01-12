@@ -17,10 +17,12 @@ import NotificationBox from "@/Components/Products/NotificationBox.vue";
 
     <!-- Page Content -->
     <main>
-                <slot />
-            </main>
+      <slot />
+    </main>
 
     <!-- Notification Box -->
-    <NotificationBox />
+    <teleport to="#modal-container">
+      <NotificationBox />
+    </teleport>
   </div>
 </template>

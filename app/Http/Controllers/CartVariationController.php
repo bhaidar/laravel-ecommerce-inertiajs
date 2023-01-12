@@ -38,7 +38,9 @@ class CartVariationController extends Controller
             Log::error($ex->getMessage());
         }
 
-        return redirect()->back()->with('notification', $request->notification);
+        session()->now('notification', $request->notification);
+
+        return redirect()->back();
     }
 
     /**

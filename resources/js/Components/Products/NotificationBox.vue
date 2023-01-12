@@ -32,7 +32,7 @@ const hideNotification = () => delete usePage().props?.value?.flash?.notificatio
         <div class="p-4">
           <div class="flex items-start">
             <div class="flex-shrink-0">
-              <Icon :color="'fill-' + notificationColor(notification) + '-400'" :icon="icon"/>
+              <Icon :color="`${notificationColor(notification)}-400`" :icon="icon"/>
             </div>
             <div class="ml-3 w-0 flex-1 pt-0.5">
               <template v-if="notificationTitle(notification) && notificationMessage(notification)">
