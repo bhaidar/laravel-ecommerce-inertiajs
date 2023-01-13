@@ -6,6 +6,7 @@ use App\Cart\Contracts\CartInterface;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\ShippingAddress;
+use App\Models\Variation;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
@@ -31,8 +32,19 @@ class OrderController extends Controller
         ])
             ->user()->associate(auth()->user())
             ->shippingAddress()->associate($shippingAddress)
-            ->shippingType()->associate($request->shippingType)
-            ->save();
+            ->shippingType()->associate($request->shippingType);
+        $order->save();
+
+        // Link Order to variations
+        $order->variations()->attach(
+          $cart->items()->mapWithKeys(function (Variation $variation) {
+              return [
+                  $variation->id => [
+                      'quantity' => $variation->pivot->quantity,
+                  ],
+              ];
+          })
+        );
 
         return back();
     }
