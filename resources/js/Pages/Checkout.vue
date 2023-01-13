@@ -1,5 +1,5 @@
 <script setup>
-import { computed, toRaw, watch } from "vue";
+import { computed, ref, toRaw, watch } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Head, usePage, useForm } from "@inertiajs/inertia-vue3";
 import InputError from "@/Components/InputError.vue";
@@ -15,9 +15,10 @@ const props = defineProps({
   money: Object,
 });
 
+const shippingAddress = ref(null);
+
 const checkoutForm = useForm({
   email: null,
-  shippingAddress: null,
   shipping: {
     address: null,
     city: null,
@@ -26,7 +27,7 @@ const checkoutForm = useForm({
   shippingType: props.shippingTypes?.data?.[0]?.id, // set it to the first element,
 });
 
-watch(() => checkoutForm.shippingAddress, function (shippingAddressId) {
+watch(shippingAddress, function (shippingAddressId) {
   const shippingAddress = toRaw(props.shippingAddresses.data).find(
       (address) => +address.id === +shippingAddressId
   );
@@ -59,7 +60,7 @@ const subTotalFormatted = computed(() => props.cart?.data?.subTotal?.formatted);
 
 const variations = computed(() => props.cart?.data?.items);
 
-const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => shippingType.id === checkoutForm?.shippingType?.value));
+const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => shippingType.id === checkoutForm?.shippingType));
 const shippingSubtotalFormatted = computed(() => shippingTypePriceFormatted(shippingTypeSelected.value));
 const shippingSubtotal = computed(() => shippingTypePrice(shippingTypeSelected.value));
 
@@ -82,7 +83,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
 </script>
 
 <template>
-  <Head >
+  <Head>
     <title>Checkout</title>
   </Head>
 
@@ -115,7 +116,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                <Select class="w-full" v-model="checkoutForm.shippingAddress" v-if="!isGuest">
+                <Select class="w-full" v-model="shippingAddress" v-if="!isGuest">
                   <option value="">Choose a pre-saved address</option>
                   <option v-for="shippingAddress in shippingAddresses.data" :key="shippingAddress.id" :value="shippingAddress.id">{{ formattedAddress(shippingAddress) }}</option>
                 </Select>
