@@ -98,6 +98,7 @@ class Product extends Model implements HasMedia
             'size',
             'color',
             'price',
+            'season',
         ];
     }
 

@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, toRaw} from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductBrowser from "@/Components/Products/ProductBrowser.vue";

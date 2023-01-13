@@ -27,7 +27,7 @@ class ShowCategory
                 return $value->map(fn($value) => $key . ' = "' . $value . '"');
             })
             ->flatten()
-            ->join(' OR ');
+            ->join(' AND ');
 
         $maxPrice = $category->products->max('price')->getAmount();
         $price = $request->get('price') ?? $maxPrice;
@@ -47,7 +47,7 @@ class ShowCategory
                     $options['filter'] .= ' AND price <= ' . $price;
                 }
 
-                $options['facets'] = ['size', 'color'];
+                $options['facets'] = ['size', 'color', 'season'];
 
                 return $meilisearch->search($query, $options);
             },
