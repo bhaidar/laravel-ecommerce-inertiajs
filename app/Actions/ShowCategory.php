@@ -27,7 +27,7 @@ class ShowCategory
                 return $value->map(fn($value) => $key . ' = "' . $value . '"');
             })
             ->flatten()
-            ->join(' AND ');
+            ->join(' OR ');
 
         $maxPrice = $category->products->max('price')->getAmount();
         $price = $request->get('price') ?? $maxPrice;
@@ -39,7 +39,7 @@ class ShowCategory
 
                 if ($filters)
                 {
-                    $options['filter'] .= ' AND ' . $filters;
+                    $options['filter'] .= ' AND ' . '(' . $filters . ')';
                 }
 
                 if ($price) // some categories might not have products
