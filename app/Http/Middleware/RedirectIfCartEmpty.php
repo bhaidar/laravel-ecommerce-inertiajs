@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use App\Cart\Contracts\CartInterface;
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RedirectIfCartEmpty
 {
@@ -13,11 +15,11 @@ class RedirectIfCartEmpty
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Closure $next
+     * @return RedirectResponse|Response|mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         if ($this->cart->isEmpty()) {
             return to_route('cart.index');

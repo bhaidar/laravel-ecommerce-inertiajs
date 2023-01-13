@@ -14,6 +14,7 @@ class OrderController extends Controller
     /**
      * Handle the incoming request.
      * @param StoreOrderRequest $request
+     * @param CartInterface $cart
      */
     public function __invoke(StoreOrderRequest $request, CartInterface $cart)
     {
@@ -53,6 +54,7 @@ class OrderController extends Controller
             ]);
         });
 
-        return back();
+        // Clear cart
+        $cart->removeAll();
     }
 }

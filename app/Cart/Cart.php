@@ -83,6 +83,11 @@ class Cart implements CartInterface
         $this->instance()->variations()->detach($variation);
     }
 
+    public function removeAll()
+    {
+        $this->instance()->variations()->detach();
+    }
+
     public function subTotal(): Money
     {
         return money($this->instance()
