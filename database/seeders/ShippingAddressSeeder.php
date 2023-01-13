@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ShippingAddress;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,8 +13,10 @@ class ShippingAddressSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($user_id): void
     {
-        //
+        ShippingAddress::factory(3)->create([
+            'user_id' => $user_id,
+        ]);
     }
 }

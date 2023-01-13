@@ -14,10 +14,12 @@ class ShippingAddressFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'address' => $this->faker->address(),
+            'city' => $this->faker->city(),
+            'postcode' => $this->faker->postcode(),
         ];
     }
 }
