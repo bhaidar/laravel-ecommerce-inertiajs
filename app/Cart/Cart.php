@@ -57,8 +57,8 @@ class Cart implements CartInterface
     {
         $instance = ModelsCart::make()
             ->user()
-            ->associate($user)
-            ->save();
+            ->associate($user);
+        $instance->save();
 
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }

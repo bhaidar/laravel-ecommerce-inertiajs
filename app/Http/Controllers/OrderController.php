@@ -37,14 +37,21 @@ class OrderController extends Controller
 
         // Link Order to variations
         $order->variations()->attach(
-          $cart->items()->mapWithKeys(function (Variation $variation) {
-              return [
-                  $variation->id => [
-                      'quantity' => $variation->pivot->quantity,
-                  ],
-              ];
-          })
+            $cart->items()->mapWithKeys(function (Variation $variation) {
+                return [
+                    $variation->id => [
+                        'quantity' => $variation->pivot->quantity,
+                    ],
+                ];
+            })->toArray(),
         );
+
+        // Reduce the stock
+        $cart->items()->each(function (Variation $variation) {
+            $variation->stocks()->create([
+                'amount' => 0 - $variation->pivot->quantity,
+            ]);
+        });
 
         return back();
     }

@@ -48,7 +48,7 @@ class CartVariationController extends Controller
     public function update(PatchCartVariationRequest $request, Variation $variation, CartInterface $cart): RedirectResponse
     {
         // Change the variation quantity
-        $cart->changeQuantity($variation, $request->get('quantity', 1);
+        $cart->changeQuantity($variation, $request->get('quantity', 1));
 
         // Prepare a success notification message
         $request->success();
