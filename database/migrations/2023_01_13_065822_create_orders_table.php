@@ -22,8 +22,8 @@ return new class extends Migration
             $table->foreignId('shipping_type_id')->constrained();
             $table->integer('subtotal');
             $table->timestamp('placed_at');
-            $table->timestamp('packaged_at');
-            $table->timestamp('shipped_at');
+            $table->timestamp('packaged_at')->nullable();
+            $table->timestamp('shipped_at')->nullable();
             $table->timestamps();
         });
     }

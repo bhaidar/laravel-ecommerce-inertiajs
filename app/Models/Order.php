@@ -29,8 +29,6 @@ class Order extends Model
     {
         static::creating(function (Order $order) {
            $order->placed_at = now();
-           $order->packaged_at = now();
-           $order->shipped_at = now();
            $order->uuid = (string)Str::uuid();
         });
     }
