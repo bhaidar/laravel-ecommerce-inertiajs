@@ -15,6 +15,7 @@ class CartController extends Controller
         try {
             $cart->verifyAvailableQuantities();
         } catch (QuantityNoLongerAvailableException) {
+            // When returning Inertia view
             session()->now('notification', [
                 'title' => 'Some items or quantities in your cart have become unavailable.',
                 'color' => 'gray',

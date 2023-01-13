@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\ShippingAddress;
+use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
     /**
      * Handle the incoming request.
-     *
-     * @return \Illuminate\Http\Response
+     * @param StoreOrderRequest $request
      */
     public function __invoke(StoreOrderRequest $request)
     {

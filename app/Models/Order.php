@@ -10,19 +10,18 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $timestamps = [
+    public $timestamps = [
       'placed_at',
       'packaged_at',
       'shipped_at'
     ];
 
-    protected $fillable = [
+    public $fillable = [
         'email',
         'subtotal',
         'placed_at',
         'packaged_at',
         'shipped_at',
-
     ];
 
     protected static function booted()

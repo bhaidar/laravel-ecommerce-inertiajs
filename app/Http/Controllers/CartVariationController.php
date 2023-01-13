@@ -38,9 +38,7 @@ class CartVariationController extends Controller
             Log::error($ex->getMessage());
         }
 
-        session()->now('notification', $request->notification);
-
-        return redirect()->back();
+        return redirect()->back()->withNotification($request->notification);
     }
 
     /**
@@ -62,7 +60,7 @@ class CartVariationController extends Controller
         // Prepare a success notification message
         $request->success();
 
-        return redirect()->back()->with('notification', $request->notification);
+        return redirect()->back()->withNotification($request->notification);
     }
 
     /**
@@ -79,6 +77,6 @@ class CartVariationController extends Controller
             'color' => 'green',
         ];
 
-        return redirect()->back()->with('notification', $notification);
+        return redirect()->back()->withNotification($notification);
     }
 }
