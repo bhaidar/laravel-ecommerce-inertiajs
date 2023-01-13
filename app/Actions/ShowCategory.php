@@ -27,9 +27,9 @@ class ShowCategory
                 return $value->map(fn($value) => $key . ' = "' . $value . '"');
             })
             ->flatten()
-            ->join(' AND ');
+            ->join(' OR ');
 
-        $maxPrice = $category->products->max(fn ($product) => $product->price->getAmount());
+        $maxPrice = $category->products->max('price')->getAmount();
         $price = $request->get('price') ?? $maxPrice;
 
         $search = Product::search(
