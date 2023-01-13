@@ -55,14 +55,10 @@ class Cart implements CartInterface
 
     public function create(?User $user = null)
     {
-        $instance = ModelsCart::query()->make();
-
-        if ($user)
-        {
-            $instance->user()->associate($user);
-        }
-
-        $instance->save();
+        $instance = ModelsCart::make()
+            ->user()
+            ->associate($user)
+            ->save();
 
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }

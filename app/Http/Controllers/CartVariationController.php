@@ -9,7 +9,6 @@ use App\Models\Variation;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
 
 class CartVariationController extends Controller
 {
@@ -18,17 +17,14 @@ class CartVariationController extends Controller
      * @param StoreCartVariationRequest $request
      * @return RedirectResponse
      */
-    public function store(CartInterface $cart, StoreCartVariationRequest $request): RedirectResponse
+    public function store(StoreCartVariationRequest $request, CartInterface $cart): RedirectResponse
     {
         try {
-            // Validate request
-            $request->validated();
-
             // Retrieve the Variation
-            $variation = Variation::query()->findOrFail(Request::input('variation'));
+            $variation = Variation::query()->findOrFail($request->variation);
 
             // Add the Variation
-            $cart->add($variation, Request::input('quantity', 1));
+            $cart->add($variation, $request->get('quantity', 1));
 
             // Prepare a success notification message
             $request->success($variation);
@@ -49,13 +45,10 @@ class CartVariationController extends Controller
      * @param Variation $variation
      * @return RedirectResponse
      */
-    public function update(CartInterface $cart, PatchCartVariationRequest $request, Variation $variation): RedirectResponse
+    public function update(PatchCartVariationRequest $request, Variation $variation, CartInterface $cart): RedirectResponse
     {
-        // Validate request
-        $request->validated();
-
         // Change the variation quantity
-        $cart->changeQuantity($variation, Request::input('quantity', 1));
+        $cart->changeQuantity($variation, $request->get('quantity', 1);
 
         // Prepare a success notification message
         $request->success();
