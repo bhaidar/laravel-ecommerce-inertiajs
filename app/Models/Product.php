@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Console\Traits\HasFormattedPrice;
 use App\Http\Resources\ProductResource;
 use App\Models\Scopes\LiveScope;
+use App\Traits\HasFormattedPrice;
 use App\Traits\HasImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

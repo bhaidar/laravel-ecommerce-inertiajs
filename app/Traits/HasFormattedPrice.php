@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Traits;
+namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 

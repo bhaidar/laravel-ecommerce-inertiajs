@@ -8,8 +8,9 @@ use App\Models\Order;
 use App\Models\ShippingAddress;
 use App\Models\Variation;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 
-class OrderController extends Controller
+class OrderStoreController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -56,5 +57,15 @@ class OrderController extends Controller
 
         // Clear cart
         $cart->removeAll();
+
+        if (!auth()->user())
+        {
+            // Redirect to confirmation page
+            return to_route('orders.confirmation', $order);
+        }
+
+        // User signed-in
+        // Redirect to orders page
+        return to_route('checkout');
     }
 }

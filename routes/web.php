@@ -4,7 +4,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartVariationController;
 use App\Http\Controllers\CategoryShowController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderConfirmationIndexController;
+use App\Http\Controllers\OrderStoreController;
 use App\Http\Controllers\ProductShowController;
 use App\Http\Controllers\SearchController;
 use Inertia\Inertia;
@@ -24,7 +25,9 @@ Route::get('/products/{product:slug}', ProductShowController::class)->name('prod
 Route::get('/categories/{category:slug}', CategoryShowController::class)->name('categories.show');
 
 Route::get('/checkout', CheckoutController::class)->name('cart.checkout');
-Route::post('/orders', OrderController::class)->name('orders.store');
+
+Route::post('/orders', OrderStoreController::class)->name('orders.store');
+Route::get('/orders/{order:uuid}/confirmation', OrderConfirmationIndexController::class)->name('orders.confirmation');
 
 Route::prefix('/cart')
     ->group(function () {

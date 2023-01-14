@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Console\Traits\HasFormattedPrice;
+use App\Traits\HasFormattedPrice;
 use App\Traits\HasImages;
 use App\Traits\HasStock;
 use Illuminate\Database\Eloquent\Casts\Attribute;
