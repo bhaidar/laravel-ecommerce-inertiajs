@@ -1,6 +1,14 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 
+const props = defineProps({
+  orders: Object,
+});
+
+const orderId = (order) => order?.id;
+const orderSubTotal = (order) => order?.subTotal?.formatted;
+const orderShippingType = (order) => order?.shippingType?.title;
+const orderCreatedAt = (order) => order?.createdAt;
 </script>
 
 <template>
@@ -14,13 +22,15 @@ import AppLayout from "@/Layouts/AppLayout.vue";
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="overflow-hidden sm:rounded-lg space-y-3">
-          <!-- Each order -->
-          <div class="bg-white p-6 col-span-4 space-y-3">
+
+          <template v-if="orders.data.length > 0">
+          <div v-for="order in orders.data" :key="order.id"
+              class="bg-white p-6 col-span-4 space-y-3">
             <div class="border-b pb-3 flex items-center justify-between">
-              <div>#1</div>
-              <div>Formatted subtotal</div>
-              <div>Shipping type</div>
-              <div>Created at</div>
+              <div>#{{ orderId(order) }}</div>
+              <div>{{ orderSubTotal(order) }}</div>
+              <div>{{  orderShippingType(order) }}</div>
+              <div>{{ orderCreatedAt(order) }}</div>
               <div>
                 <span class="inline-flex items-center px-3 py-1 text-sm rounded-full font-semibold bg-gray-100 text-gray-800">
                   Order status
@@ -47,6 +57,10 @@ import AppLayout from "@/Layouts/AppLayout.vue";
               </div>
             </div>
           </div>
+          </template>
+          <template v-else>
+            No orders yet
+          </template>
         </div>
       </div>
     </div>

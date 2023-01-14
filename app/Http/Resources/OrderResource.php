@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'subTotal' => $this->subtotal,
-            'createdAt' => $this->created_at,
+            'createdAt' => $this->created_at->toDateTimeString(),
             'shippingType' => ShippingTypeResource::make($this->whenLoaded('shippingType')),
         ];
     }
