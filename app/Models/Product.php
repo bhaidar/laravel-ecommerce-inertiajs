@@ -35,6 +35,11 @@ class Product extends Model implements HasMedia
         static::addGlobalScope(new LiveScope());
     }
 
+    protected function getMoneyAttribute(): string
+    {
+        return 'price';
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);

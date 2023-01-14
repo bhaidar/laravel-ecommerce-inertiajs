@@ -37,7 +37,7 @@ class OrderStoreController extends Controller
             ->shippingType()->associate($request->shippingType);
         $order->save();
 
-        // Link Order to variations
+        // Link Orders to variations
         $order->variations()->attach(
             $cart->items()->mapWithKeys(function (Variation $variation) {
                 return [
@@ -66,6 +66,6 @@ class OrderStoreController extends Controller
 
         // User signed-in
         // Redirect to orders page
-        return to_route('checkout');
+        return to_route('orders.index');
     }
 }

@@ -29,6 +29,7 @@ class ShowCategory
             ->flatten()
             ->join(' OR ');
 
+        //dd($category->products);
         $maxPrice = $category->products->max('price')->getAmount();
         $price = $request->get('price') ?? $maxPrice;
 

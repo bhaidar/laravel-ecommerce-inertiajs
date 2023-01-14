@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFormattedPrice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,7 @@ use Illuminate\Support\Str;
 class Order extends Model
 {
     use HasFactory;
+    use HasFormattedPrice;
 
     public $timestamps = [
       'placed_at',
@@ -32,6 +34,11 @@ class Order extends Model
            $order->placed_at = now();
            $order->uuid = (string)Str::uuid();
         });
+    }
+
+    protected function getMoneyAttribute(): string
+    {
+        return 'subtotal';
     }
 
     public function user(): BelongsTo

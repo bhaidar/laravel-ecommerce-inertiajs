@@ -5,6 +5,7 @@ use App\Http\Controllers\CartVariationController;
 use App\Http\Controllers\CategoryShowController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderConfirmationIndexController;
+use App\Http\Controllers\OrderIndexController;
 use App\Http\Controllers\OrderStoreController;
 use App\Http\Controllers\ProductShowController;
 use App\Http\Controllers\SearchController;
@@ -26,8 +27,18 @@ Route::get('/categories/{category:slug}', CategoryShowController::class)->name('
 
 Route::get('/checkout', CheckoutController::class)->name('cart.checkout');
 
-Route::post('/orders', OrderStoreController::class)->name('orders.store');
-Route::get('/orders/{order:uuid}/confirmation', OrderConfirmationIndexController::class)->name('orders.confirmation');
+Route::prefix('/orders')
+    ->group(function () {
+        Route::post('/', OrderStoreController::class)
+            ->name('orders.store');
+
+        Route::get('/{order:uuid}/confirmation', OrderConfirmationIndexController::class)
+            ->name('orders.confirmation');
+
+        Route::get('/', OrderIndexController::class)
+            ->middleware(['auth'])
+            ->name('orders.index');
+    });
 
 Route::prefix('/cart')
     ->group(function () {

@@ -16,6 +16,6 @@ class OrderConfirmationIndexController extends Controller
      */
     public function __invoke(Order $order): Response
     {
-        return Inertia::render('Order/Confirmation', compact('order'));
+        return Inertia::render('Orders/Confirmation', compact('order'));
     }
 }

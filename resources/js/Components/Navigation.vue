@@ -24,7 +24,7 @@ const showingNavigationDropdown = ref(false);
         <div class="flex flex-grow">
           <!-- Logo -->
           <div class="shrink-0 flex items-center">
-            <Link :href="route('home')">
+            <Link :href="route('dashboard')">
               <ApplicationLogo
                   class="block h-9 w-auto fill-current text-gray-800"/>
             </Link>
@@ -79,6 +79,10 @@ const showingNavigationDropdown = ref(false);
                 </template>
 
                 <template #content>
+                  <DropdownLink
+                      :href="route('orders.index')">
+                    Orders
+                  </DropdownLink>
                   <DropdownLink
                       :href="route('profile.edit')">
                     Profile
@@ -143,6 +147,10 @@ const showingNavigationDropdown = ref(false);
           </div>
 
           <div class="mt-3 space-y-1">
+            <ResponsiveNavLink
+                :href="route('orders.index')">
+              Orders
+            </ResponsiveNavLink>
             <ResponsiveNavLink
                 :href="route('profile.edit')">
               Profile

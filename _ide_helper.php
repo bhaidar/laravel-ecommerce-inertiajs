@@ -17520,6 +17520,16 @@
         {
                         return \Illuminate\Support\Collection::debug();
         }
+                    /**
+         * 
+         *
+         * @see \App\Providers\AppServiceProvider::boot()
+         * @static 
+         */ 
+        public static function recursive()
+        {
+                        return \Illuminate\Support\Collection::recursive();
+        }
          
     }
      

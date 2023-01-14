@@ -2,26 +2,20 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Casts\MoneyAttribute;
 
 trait HasFormattedPrice
 {
+    abstract protected function getMoneyAttribute(): string;
+
     public function initializeHasFormattedPrice(): void
     {
-        // Not needed because price already exists,
-        // I am keeping it for reference
-        // $this->append('price');
-    }
+        // Append the accessor
+        $this->append($this->getMoneyAttribute());
 
-    /**
-     * Get the formatted price.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
-    protected function price(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => money($value),
-        );
+        // Add an accessor dynamically
+        $this->casts = array_merge($this->casts, [
+            $this->getMoneyAttribute() => MoneyAttribute::class,
+        ]);
     }
 }

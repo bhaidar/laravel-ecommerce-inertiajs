@@ -16,4 +16,9 @@ class ShippingType extends Model
         'price',
     ];
 
+    protected function getMoneyAttribute(): string
+    {
+        return 'price';
+    }
+
 }

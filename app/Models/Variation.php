@@ -33,6 +33,11 @@ class Variation extends Model implements HasMedia
         'display_name',
     ];
 
+    protected function getMoneyAttribute(): string
+    {
+        return 'price';
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
