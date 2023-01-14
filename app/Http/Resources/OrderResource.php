@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
             'subTotal' => $this->subtotal,
             'createdAt' => $this->created_at->toDateTimeString(),
             'shippingType' => ShippingTypeResource::make($this->whenLoaded('shippingType')),
+            'variations' => VariationResource::collection($this->whenLoaded('variations')),
         ];
     }
 }
