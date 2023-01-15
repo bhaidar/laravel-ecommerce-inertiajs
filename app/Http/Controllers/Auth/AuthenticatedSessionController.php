@@ -36,6 +36,8 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // regenerating the session by default doesn't delete the session data
+        // only the ID changes to protect against malicious attacks
         $request->session()->regenerate();
 
         $cart->associate($request->user());
