@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Cart\Contracts\CartInterface;
 use App\Http\Requests\StoreOrderRequest;
+use App\Mail\OrderCreated;
 use App\Models\Order;
 use App\Models\ShippingAddress;
 use App\Models\Variation;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 
 class OrderStoreController extends Controller
@@ -54,6 +56,9 @@ class OrderStoreController extends Controller
                 'amount' => 0 - $variation->pivot->quantity,
             ]);
         });
+
+        // Send email order created
+        Mail::to($order->user)->send(new OrderCreated($order));
 
         // Clear cart
         $cart->removeAll();
