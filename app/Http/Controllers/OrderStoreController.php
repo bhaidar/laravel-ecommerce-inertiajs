@@ -63,6 +63,9 @@ class OrderStoreController extends Controller
         // Clear cart
         $cart->removeAll();
 
+        // Delete cart
+        $cart->destroy();
+
         if (!auth()->user())
         {
             // Redirect to confirmation page

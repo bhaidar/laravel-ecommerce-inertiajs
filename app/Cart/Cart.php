@@ -69,9 +69,16 @@ class Cart implements CartInterface
         $this->session->put(config('cart.session.key'), $instance->uuid);
     }
 
+    public function destroy()
+    {
+        $this->session->forget(config('cart.session.key'));
+        $this->instance->delete();
+    }
+
     public function exists()
     {
-        return $this->session->has(config('cart.session.key'));
+        // Exists in both the session and database
+        return $this->session->has(config('cart.session.key')) && $this->instance();
     }
 
     public function isEmpty(): bool

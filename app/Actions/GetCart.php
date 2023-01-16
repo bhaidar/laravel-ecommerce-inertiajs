@@ -18,13 +18,15 @@ class GetCart
                 'variations.ancestorsAndSelf',
             ])
             ->whereUuid($session->get(config('cart.session.key')))
-            ->firstOrFail();
+            ->first();
 
-        // Populate variation media urls
-        $this->populateVariationMediaUrls($instance->variations);
+        if ($instance) {
+            // Populate variation media urls
+            $this->populateVariationMediaUrls($instance->variations);
 
-        // Populate Stock
-        $this->loadStock($instance->variations);
+            // Populate Stock
+            $this->loadStock($instance->variations);
+        }
 
         return $instance;
     }
