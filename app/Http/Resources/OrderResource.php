@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             'createdAt' => $this->created_at->toDateTimeString(),
             'shippingType' => ShippingTypeResource::make($this->whenLoaded('shippingType')),
             'variations' => VariationResource::collection($this->whenLoaded('variations')),
+            'status' => $this->status(),
         ];
     }
 }

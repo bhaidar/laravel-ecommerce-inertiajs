@@ -11,6 +11,7 @@ const orderSubTotal = (order) => order?.subTotal?.formatted;
 const orderShippingType = (order) => order?.shippingType?.title;
 const orderCreatedAt = (order) => order?.createdAt;
 const orderVariations = (order) => order?.variations;
+const orderStatus = (order) => order?.status;
 
 const orderVariationAncestors = (variation) => variation?.ancestorsAndSelf;
 const orderVariationImage = (variation) => variation?.medias?.[0]?.originalImage;
@@ -42,7 +43,7 @@ const orderVariationPrice = (variation) => variation?.price?.formatted;
               <div>{{ orderCreatedAt(order) }}</div>
               <div>
                 <span class="inline-flex items-center px-3 py-1 text-sm rounded-full font-semibold bg-gray-100 text-gray-800">
-                  Order status
+                  {{ orderStatus(order) }}
                 </span>
               </div>
             </div>

@@ -28,6 +28,12 @@ class Order extends Model
         'shipped_at',
     ];
 
+    protected $statuses = [
+        'placed_at' => 'Order Placed',
+        'packaged_at' => 'Order Packaged',
+        'shipped_at' => 'Order Shipped',
+    ];
+
     protected static function booted()
     {
         static::creating(function (Order $order) {
@@ -61,5 +67,11 @@ class Order extends Model
         return $this->belongsToMany(Variation::class)
             ->withPivot(['quantity'])
             ->withTimestamps();
+    }
+
+    public function status()
+    {
+        return collect($this->statuses)
+            ->last(fn ($status, $key) => filled($this->{$key}));
     }
 }
