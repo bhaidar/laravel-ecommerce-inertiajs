@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Mail\OrderStatusUpdated;
 use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class OrderObserver
@@ -31,8 +33,7 @@ class OrderObserver
         // Placed At -> Packaged At -> Shipped At
         if ($originalOrder->status() !== $order->status() && $filledStatuses->count() > 0)
         {
-           // send email
-           dd('send email');
+           Mail::to($order->user)->send(new OrderStatusUpdated($order));
         }
     }
 }

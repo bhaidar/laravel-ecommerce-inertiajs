@@ -21,6 +21,8 @@ class ShowCategory
 
     private function loadProducts(Request $request, Category $category): array
     {
+        $result = $category->products()->with('variations')->get()->pluck('variations')->flatten()->max('price');
+
         $filters = collect($request->get('filters') ?? [])
             ->recursive() // return filter array as Collection
             ->map(function ($value, $key) {
@@ -29,7 +31,6 @@ class ShowCategory
             ->flatten()
             ->join(' OR ');
 
-        //dd($category->products);
         $maxPrice = $category->products->max('price')->getAmount();
         $price = $request->get('price') ?? $maxPrice;
 
