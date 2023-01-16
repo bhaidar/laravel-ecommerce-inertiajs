@@ -33,6 +33,11 @@ class MoneyAttribute implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        return $value;
+        if ($value instanceof Money)
+        {
+            return $value->getAmount();
+        }
+
+        return intval($value);
     }
 }

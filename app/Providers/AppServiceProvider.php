@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
+use App\Observers\OrderObserver;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
@@ -37,5 +39,7 @@ class AppServiceProvider extends ServiceProvider
                 return $value;
             });
         });
+
+        Order::observe(OrderObserver::class);
     }
 }

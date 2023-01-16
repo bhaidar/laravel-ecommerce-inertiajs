@@ -28,19 +28,11 @@ class Order extends Model
         'shipped_at',
     ];
 
-    protected $statuses = [
+    public $statuses = [
         'placed_at' => 'Order Placed',
         'packaged_at' => 'Order Packaged',
         'shipped_at' => 'Order Shipped',
     ];
-
-    protected static function booted()
-    {
-        static::creating(function (Order $order) {
-           $order->placed_at = now();
-           $order->uuid = (string)Str::uuid();
-        });
-    }
 
     protected function getMoneyAttribute(): string
     {
