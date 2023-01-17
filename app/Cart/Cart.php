@@ -75,10 +75,20 @@ class Cart implements CartInterface
         $this->instance->delete();
     }
 
-    public function exists()
+    public function exists(): bool
     {
         // Exists in both the session and database
         return $this->session->has(config('cart.session.key')) && $this->instance();
+    }
+
+    public function getPaymentIntentId()
+    {
+        return $this->instance()?->payment_intent_id;
+    }
+
+    public function hasPaymentIntent(): bool
+    {
+        return !is_null($this->instance()?->payment_intent_id);
     }
 
     public function isEmpty(): bool
@@ -141,6 +151,13 @@ class Cart implements CartInterface
     public function toResource(): CartResource
     {
         return new CartResource($this);
+    }
+
+    public function updatePaymentIntentId($paymentIntentId)
+    {
+        $this->instance()->update([
+            'payment_intent_id' => $paymentIntentId,
+        ]);
     }
 
     /**

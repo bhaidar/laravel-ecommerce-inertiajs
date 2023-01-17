@@ -1,7 +1,8 @@
 <script setup>
-import { computed, ref, toRaw, watch } from "vue";
-import AppLayout from "@/Layouts/AppLayout.vue";
+import {computed, onMounted, ref, toRaw, watch} from "vue";
 import { Head, usePage, useForm } from "@inertiajs/inertia-vue3";
+import axios from 'axios';
+import AppLayout from "@/Layouts/AppLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -16,6 +17,7 @@ const props = defineProps({
 });
 
 const shippingAddress = ref(null);
+const paymentIntent = ref(null);
 
 const checkoutForm = useForm({
   email: null,
@@ -80,6 +82,15 @@ const formattedAddress = (shippingAddress) => {
 const shippingTypePriceFormatted = (shippingType) => shippingType?.price?.formatted;
 const shippingTypePrice = (shippingType) => shippingType?.price?.amount;
 const shippingTypeValue = (shippingType) => shippingType?.id;
+
+const getPaymentIntent = () => {
+  axios.get(`${route('payment-intent')}?total=${cartTotal.value}`)
+      .then(function (response) {
+        paymentIntent.value = response?.data?.data;
+      });
+};
+
+onMounted(() => getPaymentIntent());
 </script>
 
 <template>
@@ -90,7 +101,7 @@ const shippingTypeValue = (shippingType) => shippingType?.id;
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Checkout
+        Checkout {{ paymentIntent }}
       </h2>
     </template>
 

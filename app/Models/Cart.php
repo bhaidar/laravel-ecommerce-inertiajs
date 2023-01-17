@@ -15,6 +15,10 @@ class Cart extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'payment_intent_id',
+    ];
+
     public static function booted()
     {
         static::creating(function ($model) {

@@ -7,6 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderConfirmationIndexController;
 use App\Http\Controllers\OrderIndexController;
 use App\Http\Controllers\OrderStoreController;
+use App\Http\Controllers\PaymentIntentController;
 use App\Http\Controllers\ProductShowController;
 use App\Http\Controllers\SearchController;
 use Inertia\Inertia;
@@ -25,6 +26,7 @@ Route::get('/search', SearchController::class)->name('search');
 Route::get('/products/{product:slug}', ProductShowController::class)->name('products.show');
 Route::get('/categories/{category:slug}', CategoryShowController::class)->name('categories.show');
 
+Route::get('/payment-intent', PaymentIntentController::class)->name('payment-intent');
 Route::get('/checkout', CheckoutController::class)->name('cart.checkout');
 
 Route::prefix('/orders')
