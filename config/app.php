@@ -201,6 +201,11 @@ return [
          * Cart Service Provider
          */
         App\Providers\CartServiceProvider::class,
+
+        /*
+         * Stripe Service Provider
+         */
+        App\Providers\StripeServiceProvider::class,
     ],
 
     /*
