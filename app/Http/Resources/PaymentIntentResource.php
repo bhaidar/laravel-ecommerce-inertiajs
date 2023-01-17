@@ -18,6 +18,7 @@ class PaymentIntentResource extends JsonResource
         return [
             'id' => $this->id,
             'clientSecret' => $this->client_secret,
+            'amount' => $this->amount,
         ];
     }
 }

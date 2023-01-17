@@ -62,7 +62,7 @@ const subTotalFormatted = computed(() => props.cart?.data?.subTotal?.formatted);
 
 const variations = computed(() => props.cart?.data?.items);
 
-const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => shippingType.id === checkoutForm?.shippingType));
+const shippingTypeSelected = computed(() => props?.shippingTypes?.data?.find((shippingType) => Number(shippingType.id) === Number(checkoutForm?.shippingType)));
 const shippingSubtotalFormatted = computed(() => shippingTypePriceFormatted(shippingTypeSelected.value));
 const shippingSubtotal = computed(() => shippingTypePrice(shippingTypeSelected.value));
 
@@ -83,14 +83,19 @@ const shippingTypePriceFormatted = (shippingType) => shippingType?.price?.format
 const shippingTypePrice = (shippingType) => shippingType?.price?.amount;
 const shippingTypeValue = (shippingType) => shippingType?.id;
 
-const getPaymentIntent = () => {
-  axios.get(`${route('payment-intent')}?total=${cartTotal.value}`)
+const getPaymentIntent = (cartTotal) => {
+  axios.get(`${route('payment-intent')}?total=${cartTotal}`)
       .then(function (response) {
         paymentIntent.value = response?.data?.data;
       });
 };
 
-onMounted(() => getPaymentIntent());
+// When user changes shipping type, update payment intent
+watch(cartTotal, (newTotal) => {
+  getPaymentIntent(newTotal);
+})
+
+onMounted(() => getPaymentIntent(cartTotal.value));
 </script>
 
 <template>
@@ -101,7 +106,7 @@ onMounted(() => getPaymentIntent());
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Checkout {{ paymentIntent }}
+        Checkout
       </h2>
     </template>
 
@@ -127,6 +132,7 @@ onMounted(() => getPaymentIntent());
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
+                {{ shippingAddress }}
                 <Select class="w-full" v-model="shippingAddress" v-if="!isGuest">
                   <option value="">Choose a pre-saved address</option>
                   <option v-for="shippingAddress in shippingAddresses.data" :key="shippingAddress.id" :value="shippingAddress.id">{{ formattedAddress(shippingAddress) }}</option>

@@ -39,6 +39,8 @@ class PaymentIntentController extends Controller
                 app('stripe')->paymentIntents->update($cart->getPaymentIntentId(), [
                     'amount' => (int)$request->total,
                 ]);
+
+                $paymentIntent->amount = (int)$request->total;
             }
         }
 
