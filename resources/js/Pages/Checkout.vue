@@ -25,11 +25,14 @@ const stripeKey = ref(import.meta.env.VITE_STRIPE_KEY);
 const stripe = ref(null);
 const elements = ref(null);
 const card = ref(null);
+const cardError = ref(null);
 
 const configureStripe = () => {
   stripe.value = Stripe(stripeKey.value);
   elements.value = stripe.value.elements();
   card.value = elements.value.create('card');
+  // Payment Element
+  //paymentElement.value = elements.value.create('payment', { clientSecret: paymentIntent.clientSecret });
   card.value.mount('#card-element');
 };
 
@@ -57,13 +60,52 @@ watch(shippingAddress, function (shippingAddressId) {
   }
 });
 
-const checkout = () => {
-  checkoutForm.post(route('orders.store'), {
-    preserveScroll: true,
-    onSuccess: () => {
-      checkoutForm.reset();
+const checkout = async () => {
+  // // Payment Element
+  // await stripe.value.confirmPayment({
+  //   element: paymentElement.value,
+  //   confirmParams: {
+  //     return_url: `${window.location}complete`, // url when customer completes the payment
+  //   }
+  // });
+
+  // Cart Element
+  const { paymentIntent: stripePaymentIntent, error } = await stripe.value.confirmCardPayment(`${paymentIntent.value.clientSecret}`, {
+        payment_method: {
+          card: card.value,
+          billing_details: {
+            email: checkoutForm.email,
+          },
+        },
+      },
+  );
+
+  if (error) {
+    if (error.type === 'card_error') {
+      cardError.value = error.message;
     }
-  })
+  }
+
+  console.log({
+    error,
+    stripePaymentIntent,
+  });
+
+  // if (paymentIntent.value) {
+  //   // Redirect to Dashboard
+  //   Inertia.post(route('payments.redirect'));
+  // }
+
+  // Validate form to make sure all fields are filled before sending out payment
+
+
+
+  // checkoutForm.post(route('orders.store'), {
+  //   preserveScroll: true,
+  //   onSuccess: () => {
+  //     checkoutForm.reset();
+  //   }
+  // })
 };
 
 const productSlug = (product) => product?.slug;
@@ -150,7 +192,6 @@ onMounted(() => getPaymentIntent(cartTotal.value));
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Shipping</div>
 
-                {{ shippingAddress }}
                 <Select class="w-full" v-model="shippingAddress" v-if="!isGuest">
                   <option value="">Choose a pre-saved address</option>
                   <option v-for="shippingAddress in shippingAddresses.data" :key="shippingAddress.id" :value="shippingAddress.id">{{ formattedAddress(shippingAddress) }}</option>
