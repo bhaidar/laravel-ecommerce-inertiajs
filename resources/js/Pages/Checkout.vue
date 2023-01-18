@@ -41,7 +41,7 @@ loadScript('https://js.stripe.com/v3/', () => {
 });
 
 const checkoutForm = useForm({
-  email: null,
+  email: usePage()?.props?.value?.auth?.user?.email,
   shipping: {
     address: null,
     city: null,
@@ -71,6 +71,7 @@ const checkout = async () => {
   //     return_url: `${window.location}complete`, // url when customer completes the payment
   //   }
   // });
+
 
   // Cart Element
   const { error } = await stripe.value.confirmCardPayment(`${paymentIntent.value.clientSecret}`, {
