@@ -8,6 +8,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import Select from "@/Components/Select.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import loadScript from '@/helper.js';
 
 const props = defineProps({
   cart: Object,
@@ -18,6 +19,23 @@ const props = defineProps({
 
 const shippingAddress = ref(null);
 const paymentIntent = ref(null);
+
+// make composable
+const stripeKey = ref(import.meta.env.VITE_STRIPE_KEY);
+const stripe = ref(null);
+const elements = ref(null);
+const card = ref(null);
+
+const configureStripe = () => {
+  stripe.value = Stripe(stripeKey.value);
+  elements.value = stripe.value.elements();
+  card.value = elements.value.create('card');
+  card.value.mount('#card-element');
+};
+
+loadScript('https://js.stripe.com/v3/', () => {
+  configureStripe();
+});
 
 const checkoutForm = useForm({
   email: null,
@@ -106,7 +124,7 @@ onMounted(() => getPaymentIntent(cartTotal.value));
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Checkout
+        Checkout {{ paymentIntent?.clientSecret }}
       </h2>
     </template>
 
@@ -184,8 +202,8 @@ onMounted(() => getPaymentIntent(cartTotal.value));
               <div class="space-y-3">
                 <div class="font-semibold text-lg">Payment</div>
 
-                <div>
-                  Stripe card form
+                <div id="card-element" class="border border-gray-300 rounded-md py-4 px-2">
+
                 </div>
               </div>
             </div>
