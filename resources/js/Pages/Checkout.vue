@@ -61,6 +61,9 @@ watch(shippingAddress, function (shippingAddressId) {
 });
 
 const checkout = async () => {
+  // Validate form to make sure all fields are filled before sending out payment
+
+
   // // Payment Element
   // await stripe.value.confirmPayment({
   //   element: paymentElement.value,
@@ -70,7 +73,7 @@ const checkout = async () => {
   // });
 
   // Cart Element
-  const { paymentIntent: stripePaymentIntent, error } = await stripe.value.confirmCardPayment(`${paymentIntent.value.clientSecret}`, {
+  const { error } = await stripe.value.confirmCardPayment(`${paymentIntent.value.clientSecret}`, {
         payment_method: {
           card: card.value,
           billing_details: {
@@ -86,26 +89,12 @@ const checkout = async () => {
     }
   }
 
-  console.log({
-    error,
-    stripePaymentIntent,
+  checkoutForm.post(route('orders.store'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      checkoutForm.reset();
+    }
   });
-
-  // if (paymentIntent.value) {
-  //   // Redirect to Dashboard
-  //   Inertia.post(route('payments.redirect'));
-  // }
-
-  // Validate form to make sure all fields are filled before sending out payment
-
-
-
-  // checkoutForm.post(route('orders.store'), {
-  //   preserveScroll: true,
-  //   onSuccess: () => {
-  //     checkoutForm.reset();
-  //   }
-  // })
 };
 
 const productSlug = (product) => product?.slug;

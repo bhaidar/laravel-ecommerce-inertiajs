@@ -8,6 +8,7 @@ use App\Mail\OrderCreated;
 use App\Models\Order;
 use App\Models\ShippingAddress;
 use App\Models\Variation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -18,9 +19,17 @@ class OrderStoreController extends Controller
      * Handle the incoming request.
      * @param StoreOrderRequest $request
      * @param CartInterface $cart
+     * @return RedirectResponse
      */
-    public function __invoke(StoreOrderRequest $request, CartInterface $cart)
+    public function __invoke(StoreOrderRequest $request, CartInterface $cart): RedirectResponse
     {
+        $paymentIntent = app('stripe')->paymentIntents->retrieve($cart->getPaymentIntentId());
+        if ($paymentIntent->status !== 'succeeded') {
+            return back()->with('notification', [
+                'message' => 'Order is not successful!',
+            ]);
+        }
+
         // Create shipping address
         $shippingAddress = (ShippingAddress::query()
             ->when(auth()->user(), fn($query) => $query->whereBelongsTo(auth()->user()))
